@@ -12,7 +12,7 @@ class User(AbstractUser):
     first_name = models.CharField(max_length=32, verbose_name='Имя')
     last_name = models.CharField(max_length=32, verbose_name='Фамилия')
     phone_number = models.CharField(unique=True, max_length=20, verbose_name='Номер телефона', blank=True, null=True)
-    telegram_id = models.CharField(unique=True, max_length=64, verbose_name='ID чата телеграм', blank=True, null=True)
+    tg_chat_id = models.CharField(unique=True, max_length=64, verbose_name='ID чата телеграм', blank=True, null=True)
     avatar = models.ImageField(
         upload_to='users/avatars/',
         default='users/avatars/default_ava.png',
