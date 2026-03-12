@@ -30,4 +30,4 @@ class UserRegisterForm(UserCreationForm):
 
         self.fields['password1'].help_text = 'Минимум 8 символов, не простой пароль.'
         self.fields['password2'].help_text = 'Введите тот же пароль ещё раз.'
-        self.fields['phone'].help_text = 'Введите номер телефона в формате +7 ХХХ ХХ ХХ'
+        self.fields['phone_number'].help_text = 'Введите номер телефона в формате +7 ХХХ ХХ ХХ'
