@@ -1,10 +1,11 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <title>Title</title>
-</head>
-<body>
-
-</body>
-</html>
+<nav>
+    <a href="/admin/">Админка</a>
+    <a href="{% url 'users:login' %}">Вход</a>
+    <a href="{% url 'users:logout' %}">Выход</a>
+    <a href="{% url 'users:register' %}">Регистрация</a>
+    <a href="{% url 'users:users-list' %}">Список пользователей</a>
+    {% if request.user.is_authenticated and request.user.pk %}
+        <a href="{% url 'users:user-detail' request.user.pk %}">Мой профиль</a>
+        <a href="{% url 'users:user-update' request.user.pk %}">Редактировать профиль</a>
+    {% endif %}
+</nav>

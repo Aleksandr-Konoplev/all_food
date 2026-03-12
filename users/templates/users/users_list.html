@@ -1,10 +1,20 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <title>Title</title>
-</head>
-<body>
+{% extends 'base.html' %}
 
-</body>
-</html>
+{% block title %}Список пользователей{% endblock %}
+
+{% block content %}
+<h1>Список пользователей</h1>
+{% if users %}
+    <ul>
+        {% for user_item in users %}
+            <li>
+                {{ user_item.first_name }} {{ user_item.last_name }} - {{ user_item.email }}
+                <a href="{% url 'users:user-detail' user_item.pk %}">Открыть</a>
+                <a href="{% url 'users:user-update' user_item.pk %}">Редактировать</a>
+            </li>
+        {% endfor %}
+    </ul>
+{% else %}
+    <p>Пользователи пока отсутствуют.</p>
+{% endif %}
+{% endblock %}
