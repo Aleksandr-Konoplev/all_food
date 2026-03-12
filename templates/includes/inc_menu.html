@@ -1,7 +1,17 @@
+<!--suppress HtmlUnknownTarget -->
 <nav>
+    {% if request.user.is_authenticated %}
+        <p>Статус: пользователь авторизован</p>
+    {% else %}
+        <p>Статус: пользователь не авторизован</p>
+    {% endif %}
+
     <a href="/admin/">Админка</a>
     <a href="{% url 'users:login' %}">Вход</a>
-    <a href="{% url 'users:logout' %}">Выход</a>
+    <form method="post" action="{% url 'users:logout' %}">
+        {% csrf_token %}
+        <button type="submit">Выход</button>
+    </form>
     <a href="{% url 'users:register' %}">Регистрация</a>
     <a href="{% url 'users:users-list' %}">Список пользователей</a>
     {% if request.user.is_authenticated and request.user.pk %}
