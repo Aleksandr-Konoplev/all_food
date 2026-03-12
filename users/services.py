@@ -12,16 +12,16 @@ def custom_send_email(service, subject, body, recipient_list):
 
     connection = get_connection(
         backend='django.core.mail.backends.smtp.EmailBackend',
-        host=config["HOST"],
-        port=config["PORT"],
-        username=config["USER"],
-        password=config["PASSWORD"],
+        host=config['HOST'],
+        port=config['PORT'],
+        username=config['USER'],
+        password=config['PASSWORD'],
     )
 
     email = EmailMessage(
         subject=subject,
         body=body,
-        from_email=config["USER"],
+        from_email=config['USER'],
         to=recipient_list,
         connection=connection
     )

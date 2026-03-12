@@ -109,18 +109,18 @@ DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
 # =======================================================================
 EMAIL_SERVICES = {
     # Почта для общения персонала
-    "main": {
-        "HOST": os.getenv("EMAIL_HOST_MAIN"),
-        "PORT": int(os.getenv("EMAIL_PORT_MAIN")),
-        "USER": os.getenv("EMAIL_HOST_USER_MAIN"),
-        "PASSWORD": os.getenv("EMAIL_HOST_PASSWORD_MAIN"),
+    'main': {
+        'HOST': os.getenv('EMAIL_HOST_MAIN'),
+        'PORT': int(os.getenv('EMAIL_PORT_MAIN')),
+        'USER': os.getenv('EMAIL_HOST_USER_MAIN'),
+        'PASSWORD': os.getenv('EMAIL_HOST_PASSWORD_MAIN'),
     },
     # Почта для автоматических рассылок
-    "auto": {
-        "HOST": os.getenv("EMAIL_HOST_AUTO"),
-        "PORT": int(os.getenv("EMAIL_PORT_AUTO")),
-        "USER": os.getenv("EMAIL_HOST_USER_AUTO"),
-        "PASSWORD": os.getenv("EMAIL_HOST_PASSWORD_AUTO"),
+    'auto': {
+        'HOST': os.getenv('EMAIL_HOST_AUTO'),
+        'PORT': int(os.getenv('EMAIL_PORT_AUTO')),
+        'USER': os.getenv('EMAIL_HOST_USER_AUTO'),
+        'PASSWORD': os.getenv('EMAIL_HOST_PASSWORD_AUTO'),
     }
 }
 
@@ -128,8 +128,8 @@ EMAIL_BACKEND = 'django.core.mail.backends.smtp.EmailBackend'
 EMAIL_USE_TLS = True if os.getenv('EMAIL_USE_TLS') == 'True' else False
 EMAIL_USE_SSL = True if os.getenv('EMAIL_USE_SSL') == 'True' else False
 # Главную почту используем по умолчанию
-SERVER_EMAIL = EMAIL_SERVICES["main"]["USER"]
-DEFAULT_FROM_EMAIL = EMAIL_SERVICES["main"]["USER"]
+SERVER_EMAIL = EMAIL_SERVICES['main']['USER']
+DEFAULT_FROM_EMAIL = EMAIL_SERVICES['main']['USER']
 
 # EMAIL_HOST = os.getenv('EMAIL_HOST')
 # EMAIL_PORT = int(os.getenv('EMAIL_PORT'))

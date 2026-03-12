@@ -14,7 +14,7 @@ from users.models import User
 class UserCreateView(CreateView):
     model = User
     form_class = UserRegisterForm
-    success_url = reverse_lazy("users:login")
+    success_url = reverse_lazy('users:login')
 
 
 class UserListView(ListView):
@@ -30,7 +30,10 @@ class UserDetailView(DetailView):
 
 
 class UserUpdateView(UpdateView):
-    pass
+    model = User
+    form_class = UserRegisterForm
+    template_name = 'users/user_form.html'
+    success_url = reverse_lazy('sending_messages:recipients_list')
 
 
 class UserDeleteView(DeleteView):
