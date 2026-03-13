@@ -18,7 +18,7 @@ class ReservationCreateView(LoginRequiredMixin, CreateView):
     success_url = reverse_lazy('table_reservation:reservation-list')
 
     def form_valid(self, form):
-        form.instance.client = self.request.user
+        form.instance.owner = self.request.user
         return super().form_valid(form)
 
 

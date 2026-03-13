@@ -19,20 +19,20 @@ class UserCreateView(CreateView):
 
 class UserListView(ListView):
     model = User
-    template_name = 'users/users_list.html'
+    template_name = 'users/users_list.html'  # type: ignore
     context_object_name = 'users'
 
 
 class UserDetailView(DetailView):
     model = User
-    template_name = 'users/user_detail.html'
+    template_name = 'users/user_detail.html'  # type: ignore
     context_object_name = 'user'
 
 
 class UserUpdateView(UpdateView):
     model = User
     form_class = UserRegisterForm
-    template_name = 'users/user_form.html'
+    template_name = 'users/user_form.html'  # type: ignore
     success_url = reverse_lazy('sending_messages:recipients_list')
 
 
