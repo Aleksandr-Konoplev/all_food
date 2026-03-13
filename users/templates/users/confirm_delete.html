@@ -1,0 +1,41 @@
+{% extends 'base.html' %}
+
+{% block title %}Удаление профиля | All Food{% endblock %}
+
+{% block content %}
+<div class="row justify-content-center">
+    <div class="col-lg-8 col-xl-6">
+        <div class="card rounded-4 info-card border-danger-subtle">
+            <div class="card-body p-4 p-lg-5">
+                <span class="badge text-bg-danger-subtle text-danger-emphasis rounded-pill mb-3">Подтверждение удаления</span>
+                <h2 class="mb-3">Удалить профиль {{ object.first_name }}?</h2>
+                <p class="text-body-secondary mb-4">
+                    Аккаунт {{ object.email }} будет удален без возможности восстановления.
+                </p>
+
+                <div class="card bg-body-tertiary border-0 rounded-4 mb-4">
+                    <div class="card-body p-4">
+                        <dl class="row mb-0">
+                            <dt class="col-sm-4">Имя</dt>
+                            <dd class="col-sm-8">{{ object.first_name }}</dd>
+
+                            <dt class="col-sm-4">Фамилия</dt>
+                            <dd class="col-sm-8">{{ object.last_name|default:'-' }}</dd>
+
+                            <dt class="col-sm-4">Телефон</dt>
+                            <dd class="col-sm-8">{{ object.phone_number|default:'-' }}</dd>
+                        </dl>
+                    </div>
+                </div>
+
+                <form method="post" class="d-flex flex-wrap gap-2">
+                    {% csrf_token %}
+                    <button type="submit" class="btn btn-danger">Удалить профиль</button>
+                    <a href="{% url 'users:user-detail' object.pk %}" class="btn btn-outline-secondary">Отмена</a>
+                    <a href="{% url 'table_reservation:reservation-list' %}" class="btn btn-link text-decoration-none">На главную</a>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}
