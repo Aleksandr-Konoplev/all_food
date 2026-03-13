@@ -1,0 +1,25 @@
+body {
+    min-height: 100vh;
+    background: linear-gradient(180deg, #f7f1e8 0%, #fffaf4 45%, #f2e6d8 100%);
+}
+
+.hero-card {
+    background: linear-gradient(135deg, rgba(92, 47, 27, 0.92), rgba(166, 93, 56, 0.88));
+    color: #fff8f1;
+    border: 0;
+    overflow: hidden;
+}
+
+.hero-badge {
+    background-color: rgba(255, 255, 255, 0.14);
+    border: 1px solid rgba(255, 255, 255, 0.2);
+}
+
+.info-card {
+    border: 0;
+    box-shadow: 0 1rem 2rem rgba(74, 46, 33, 0.08);
+}
+
+.page-shell {
+    padding-bottom: 3rem;
+}
