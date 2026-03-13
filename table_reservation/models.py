@@ -26,7 +26,7 @@ class Reservation(models.Model):
     deposit: сумма депозита за столик
     """
 
-    client = models.ForeignKey(User, on_delete=models.CASCADE, verbose_name='Пользователь совершивший бронирование')
+    owner = models.ForeignKey(User, on_delete=models.CASCADE, verbose_name='Пользователь совершивший бронирование')
 
     date_visit = models.DateField(verbose_name='Дата визита')
     time_visit = models.TimeField(verbose_name='Время визита')
@@ -41,4 +41,4 @@ class Reservation(models.Model):
         verbose_name_plural = 'Бронирования'
 
     def __str__(self):
-        return f'{self.client} - {self.table}'
+        return f'{self.owner} - {self.table}'

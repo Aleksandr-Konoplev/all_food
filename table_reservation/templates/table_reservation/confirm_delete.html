@@ -1,0 +1,41 @@
+{% extends 'base.html' %}
+
+{% block title %}Удаление бронирования | All Food{% endblock %}
+
+{% block content %}
+<div class="row justify-content-center">
+    <div class="col-lg-8 col-xl-6">
+        <div class="card rounded-4 info-card border-danger-subtle">
+            <div class="card-body p-4 p-lg-5">
+                <span class="badge text-bg-danger-subtle text-danger-emphasis rounded-pill mb-3">Подтверждение удаления</span>
+                <h2 class="mb-3">Удалить бронирование №{{ object.pk }}?</h2>
+                <p class="text-body-secondary mb-4">
+                    Бронь для {{ object.client }} на {{ object.date_visit }} в {{ object.time_visit }} будет удалена без возможности восстановления.
+                </p>
+
+                <div class="card bg-body-tertiary border-0 rounded-4 mb-4">
+                    <div class="card-body p-4">
+                        <dl class="row mb-0">
+                            <dt class="col-sm-4">Столик</dt>
+                            <dd class="col-sm-8">{{ object.table }}</dd>
+
+                            <dt class="col-sm-4">Длительность</dt>
+                            <dd class="col-sm-8">{{ object.duration_visit }} мин</dd>
+
+                            <dt class="col-sm-4">Депозит</dt>
+                            <dd class="col-sm-8">{{ object.deposit }} ₽</dd>
+                        </dl>
+                    </div>
+                </div>
+
+                <form method="post" class="d-flex flex-wrap gap-2">
+                    {% csrf_token %}
+                    <button type="submit" class="btn btn-danger">Удалить бронирование</button>
+                    <a href="{% url 'table_reservation:reservation-detail' object.pk %}" class="btn btn-outline-secondary">Отмена</a>
+                    <a href="{% url 'table_reservation:reservation-list' %}" class="btn btn-link text-decoration-none">К списку</a>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}

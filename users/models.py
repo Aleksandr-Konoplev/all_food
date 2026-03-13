@@ -10,7 +10,7 @@ class User(AbstractUser):
     username = None
     email = models.EmailField(unique=True, verbose_name='Email')
     first_name = models.CharField(max_length=32, verbose_name='Имя')
-    last_name = models.CharField(max_length=32, verbose_name='Фамилия')
+    last_name = models.CharField(max_length=32, verbose_name='Фамилия', blank=True, null=True)
     phone_number = models.CharField(unique=True, max_length=20, verbose_name='Номер телефона', blank=True, null=True)
     tg_chat_id = models.CharField(unique=True, max_length=64, verbose_name='ID чата телеграм', blank=True, null=True)
     avatar = models.ImageField(

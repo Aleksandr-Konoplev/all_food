@@ -29,7 +29,7 @@
                     {% for reservation in reservations %}
                         <tr onclick="window.location='{% url 'table_reservation:reservation-detail' reservation.pk %}'" style="cursor: pointer;">
                             <td class="px-4">{{ reservation.pk }}</td>
-                            <td class="px-4">{{ reservation.client }}</td>
+                            <td class="px-4">{{ reservation.owner }}</td>
                             <td>{{ reservation.date_visit }}</td>
                             <td>{{ reservation.time_visit }}</td>
                             <td>{{ reservation.table }}</td>
