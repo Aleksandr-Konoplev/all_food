@@ -1,0 +1,32 @@
+[
+  {
+    "num_table": 1,
+    "num_of_seats": 2,
+    "description": "Столик у окна для спокойного ужина вдвоем"
+  },
+  {
+    "num_table": 2,
+    "num_of_seats": 4,
+    "description": "Столик в центре зала для небольшой компании"
+  },
+  {
+    "num_table": 3,
+    "num_of_seats": 4,
+    "description": "Угловой столик в тихой части ресторана"
+  },
+  {
+    "num_table": 4,
+    "num_of_seats": 6,
+    "description": "Просторный столик для семейного ужина"
+  },
+  {
+    "num_table": 5,
+    "num_of_seats": 6,
+    "description": "Столик рядом с барной зоной для дружеской встречи"
+  },
+  {
+    "num_table": 6,
+    "num_of_seats": 8,
+    "description": "Большой столик для праздника или компании гостей"
+  }
+]
