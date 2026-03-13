@@ -17,6 +17,7 @@
             <table class="table align-middle mb-0">
                 <thead class="table-light">
                     <tr>
+                        <th class="px-4 py-3">№ брони</th>
                         <th class="px-4 py-3">Гость</th>
                         <th class="py-3">Дата</th>
                         <th class="py-3">Время</th>
@@ -26,7 +27,8 @@
                 </thead>
                 <tbody>
                     {% for reservation in reservations %}
-                        <tr>
+                        <tr onclick="window.location='{% url 'table_reservation:reservation-detail' reservation.pk %}'" style="cursor: pointer;">
+                            <td class="px-4">{{ reservation.pk }}</td>
                             <td class="px-4">{{ reservation.client }}</td>
                             <td>{{ reservation.date_visit }}</td>
                             <td>{{ reservation.time_visit }}</td>
@@ -35,7 +37,9 @@
                         </tr>
                     {% empty %}
                         <tr>
-                            <td class="px-4 py-4 text-body-secondary" colspan="5">Пока нет бронирований. Можно создать первое через форму бронирования.</td>
+                            <td class="px-4 py-4 text-body-secondary" colspan="6">
+                                Пока нет бронирований. Можно создать первое через форму бронирования.
+                            </td>
                         </tr>
                     {% endfor %}
                 </tbody>

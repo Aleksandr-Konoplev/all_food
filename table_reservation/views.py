@@ -12,7 +12,7 @@ from table_reservation.forms import ReservationForm
 class ReservationCreateView(CreateView):
     model = Reservation
     form_class = ReservationForm
-    template_name = 'table_reservation/reservation_form.html'
+    template_name = 'table_reservation/reservation_form.html'  # type: ignore
     success_url = reverse_lazy('table_reservation:reservation-list')
 
     def form_valid(self, form):
@@ -22,24 +22,24 @@ class ReservationCreateView(CreateView):
 
 class ReservationListView(ListView):
     model = Reservation
-    template_name = 'table_reservation/reservations_list.html'
+    template_name = 'table_reservation/reservations_list.html'  # type: ignore
     context_object_name = 'reservations'
 
 
 class ReservationDetailView(DetailView):
     model = Reservation
-    template_name = 'table_reservation/reservation_detail.html'
+    template_name = 'table_reservation/reservation_detail.html'  # type: ignore
     context_object_name = 'reservation'
 
 
 class ReservationUpdateView(UpdateView):
     model = Reservation
     form_class = ReservationForm
-    template_name = 'table_reservation/reservation_form.html'
+    template_name = 'table_reservation/reservation_form.html'  # type: ignore
     success_url = reverse_lazy('table_reservation:reservation-list')
 
 
 class ReservationDeleteView(DeleteView):
     model = Reservation
-    template_name = 'table_reservation/confirm_delete.html'
+    template_name = 'table_reservation/confirm_delete.html'  # type: ignore
     success_url = reverse_lazy('table_reservation:reservation-list')

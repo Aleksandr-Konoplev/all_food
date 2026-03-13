@@ -88,8 +88,8 @@ AUTH_PASSWORD_VALIDATORS = [
 # Модель аутентификации пользователя
 AUTH_USER_MODEL = 'users.User'
 
-LOGIN_REDIRECT_URL = '/users/list/'
-LOGOUT_REDIRECT_URL = '/users/login/'
+LOGIN_REDIRECT_URL = 'core:home'
+LOGOUT_REDIRECT_URL = 'core:home'
 
 LANGUAGE_CODE = 'en-us'
 
