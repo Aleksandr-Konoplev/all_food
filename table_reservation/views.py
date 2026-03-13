@@ -7,7 +7,7 @@ from django.views.generic.edit import CreateView, DeleteView, UpdateView
 
 from table_reservation.models import Reservation
 from table_reservation.forms import ReservationForm
-from table_reservation.mixins import OwnerReservationQuerysetMixin
+from table_reservation.mixins import OwnerOrModerReservationQuerysetMixin
 
 
 # CRUD Reservation
@@ -22,26 +22,26 @@ class ReservationCreateView(LoginRequiredMixin, CreateView):
         return super().form_valid(form)
 
 
-class ReservationListView(LoginRequiredMixin, OwnerReservationQuerysetMixin, ListView):
+class ReservationListView(LoginRequiredMixin, OwnerOrModerReservationQuerysetMixin, ListView):
     model = Reservation
     template_name = 'table_reservation/reservations_list.html'  # type: ignore
     context_object_name = 'reservations'
 
 
-class ReservationDetailView(LoginRequiredMixin, OwnerReservationQuerysetMixin, DetailView):
+class ReservationDetailView(LoginRequiredMixin, OwnerOrModerReservationQuerysetMixin, DetailView):
     model = Reservation
     template_name = 'table_reservation/reservation_detail.html'  # type: ignore
     context_object_name = 'reservation'
 
 
-class ReservationUpdateView(LoginRequiredMixin, OwnerReservationQuerysetMixin, UpdateView):
+class ReservationUpdateView(LoginRequiredMixin, OwnerOrModerReservationQuerysetMixin, UpdateView):
     model = Reservation
     form_class = ReservationForm
     template_name = 'table_reservation/reservation_form.html'  # type: ignore
     success_url = reverse_lazy('table_reservation:reservation-list')
 
 
-class ReservationDeleteView(LoginRequiredMixin, OwnerReservationQuerysetMixin, DeleteView):
+class ReservationDeleteView(LoginRequiredMixin, OwnerOrModerReservationQuerysetMixin, DeleteView):
     model = Reservation
     template_name = 'table_reservation/confirm_delete.html'  # type: ignore
     success_url = reverse_lazy('table_reservation:reservation-list')
