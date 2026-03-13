@@ -1,4 +1,5 @@
 from django.urls import reverse_lazy
+from django import forms
 
 from django.views.generic import DetailView, ListView
 from django.views.generic.edit import CreateView, DeleteView, UpdateView
@@ -13,6 +14,10 @@ class ReservationCreateView(CreateView):
     form_class = ReservationForm
     template_name = 'table_reservation/reservation_form.html'
     success_url = reverse_lazy('table_reservation:reservation-list')
+
+    def form_valid(self, form):
+        form.instance.client = self.request.user
+        return super().form_valid(form)
 
 
 class ReservationListView(ListView):

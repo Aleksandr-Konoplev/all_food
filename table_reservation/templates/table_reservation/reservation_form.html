@@ -1,0 +1,62 @@
+{% extends 'base.html' %}
+
+{% block title %}Бронирование столика | All Food{% endblock %}
+
+{% block content %}
+<div class="row g-4 align-items-start">
+    <div class="col-lg-7">
+        <div class="card rounded-4 info-card">
+            <div class="card-body p-4 p-lg-5">
+                <h2 class="mb-3">Забронировать столик</h2>
+                <p class="text-body-secondary mb-4">Выберите гостя, дату визита, время и подходящий столик. Форму можно дальше доработать под проверку доступности столов.</p>
+
+                <form method="post">
+                    {% csrf_token %}
+                    <div class="row g-3">
+                        {% for field in form %}
+                            <div class="col-12 {% if field.name == 'date_visit' or field.name == 'time_visit' or field.name == 'duration_visit' or field.name == 'deposit' %}col-md-6{% endif %}">
+                                <label class="form-label" for="{{ field.id_for_label }}">{{ field.label }}</label>
+                                {{ field }}
+                                {% if field.help_text %}
+                                    <div class="form-text">{{ field.help_text }}</div>
+                                {% endif %}
+                                {% for error in field.errors %}
+                                    <div class="text-danger small mt-1">{{ error }}</div>
+                                {% endfor %}
+                            </div>
+                        {% endfor %}
+                    </div>
+
+                    {% if form.non_field_errors %}
+                        <div class="alert alert-danger mt-3 mb-0">
+                            {% for error in form.non_field_errors %}
+                                <div>{{ error }}</div>
+                            {% endfor %}
+                        </div>
+                    {% endif %}
+
+                    <div class="d-flex flex-wrap gap-2 mt-4">
+                        <button class="btn btn-dark" type="submit">Подтвердить бронь</button>
+                        <a class="btn btn-outline-secondary" href="{% url 'table_reservation:reservation-list' %}">Список бронирований</a>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+
+    <div class="col-lg-5">
+        <div class="card rounded-4 info-card mb-4">
+            <div class="card-body p-4">
+                <h3 class="h5 mb-3">Доступность столиков</h3>
+                <p class="text-body-secondary mb-0">Пока это статичный блок, но сюда удобно вывести свободные столики и интервалы времени из базы данных.</p>
+            </div>
+        </div>
+        <div class="card rounded-4 info-card">
+            <div class="card-body p-4">
+                <h3 class="h5 mb-3">Подтверждение</h3>
+                <p class="text-body-secondary mb-0">После отправки формы можно добавить уведомление на email, звонок администратора или автоматическое подтверждение в личном кабинете.</p>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}

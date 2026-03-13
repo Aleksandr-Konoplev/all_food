@@ -1,0 +1,46 @@
+{% extends 'base.html' %}
+
+{% block title %}Бронирования | All Food{% endblock %}
+
+{% block content %}
+<div class="d-flex flex-column flex-md-row justify-content-between align-items-md-center gap-3 mb-4">
+    <div>
+        <h2 class="mb-1">Список бронирований</h2>
+        <p class="text-body-secondary mb-0">Простая страница для просмотра текущих записей.</p>
+    </div>
+    <a class="btn btn-dark" href="{% url 'table_reservation:reservation-create' %}">Новое бронирование</a>
+</div>
+
+<div class="card rounded-4 info-card">
+    <div class="card-body p-0">
+        <div class="table-responsive">
+            <table class="table align-middle mb-0">
+                <thead class="table-light">
+                    <tr>
+                        <th class="px-4 py-3">Гость</th>
+                        <th class="py-3">Дата</th>
+                        <th class="py-3">Время</th>
+                        <th class="py-3">Столик</th>
+                        <th class="py-3">Депозит</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {% for reservation in reservations %}
+                        <tr>
+                            <td class="px-4">{{ reservation.client }}</td>
+                            <td>{{ reservation.date_visit }}</td>
+                            <td>{{ reservation.time_visit }}</td>
+                            <td>{{ reservation.table }}</td>
+                            <td>{{ reservation.deposit }}</td>
+                        </tr>
+                    {% empty %}
+                        <tr>
+                            <td class="px-4 py-4 text-body-secondary" colspan="5">Пока нет бронирований. Можно создать первое через форму бронирования.</td>
+                        </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+        </div>
+    </div>
+</div>
+{% endblock %}
