@@ -24,7 +24,7 @@ INSTALLED_APPS = [
     
     # My apps:
     'users',
-    'table_reservation'
+    'table_reservation',
     'core'
 ]
 
