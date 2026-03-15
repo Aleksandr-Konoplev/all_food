@@ -8,5 +8,6 @@
 <p>Фамилия: {{ user.last_name }}</p>
 <p>Email: {{ user.email }}</p>
 <p>Телефон: {{ user.phone_number }}</p>
+<a href="{% url 'table_reservation:reservation-list' %}">Бронирования</a>
 <a href="{% url 'users:user-update' user.pk %}">Редактировать профиль</a>
 {% endblock %}

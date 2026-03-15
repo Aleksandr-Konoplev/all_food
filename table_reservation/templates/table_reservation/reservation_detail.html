@@ -1,0 +1,42 @@
+{% extends 'base.html' %}
+
+{% block title %}Детали бронирования | All Food{% endblock %}
+
+{% block content %}
+<div class="row g-4">
+    <div class="col-12">
+        <div class="card rounded-4 info-card">
+            <div class="card-body p-4 p-lg-5">
+                <h2 class="mb-3">Бронирование №{{ reservation.id }}</h2>
+                <p class="text-body-secondary mb-4">Информация о выбранном бронировании.</p>
+
+                <dl class="row">
+                    <dt class="col-sm-3">Гость</dt>
+                    <dd class="col-sm-9">{{ reservation.owner }}</dd>
+
+                    <dt class="col-sm-3">Дата визита</dt>
+                    <dd class="col-sm-9">{{ reservation.date_visit }}</dd>
+
+                    <dt class="col-sm-3">Время визита</dt>
+                    <dd class="col-sm-9">{{ reservation.time_visit }}</dd>
+
+                    <dt class="col-sm-3">Длительность (мин)</dt>
+                    <dd class="col-sm-9">{{ reservation.duration_visit }}</dd>
+
+                    <dt class="col-sm-3">Столик</dt>
+                    <dd class="col-sm-9">{{ reservation.table }}</dd>
+
+                    <dt class="col-sm-3">Депозит</dt>
+                    <dd class="col-sm-9">{{ reservation.deposit }} ₽</dd>
+                </dl>
+
+                <div class="mt-4">
+                    <a href="{% url 'table_reservation:reservation-list' %}" class="btn btn-outline-secondary">← Список бронирований</a>
+                    <a href="{% url 'table_reservation:reservation-update' reservation.id %}" class="btn btn-sm btn-outline-dark ms-2">Изменить</a>
+                    <a href="{% url 'table_reservation:reservation-delete' reservation.id %}" class="btn btn-sm btn-outline-danger ms-2">Удалить</a>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}

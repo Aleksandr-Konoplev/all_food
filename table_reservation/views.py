@@ -1,40 +1,48 @@
+from django.contrib.auth.mixins import LoginRequiredMixin
 from django.urls import reverse_lazy
+from django import forms
 
 from django.views.generic import DetailView, ListView
 from django.views.generic.edit import CreateView, DeleteView, UpdateView
 
 from table_reservation.models import Reservation
 from table_reservation.forms import ReservationForm
+from table_reservation.mixins import OwnerOrModerReservationQuerysetMixin
+from core.mixins import AddTextContentMixin
 
 
 # CRUD Reservation
-class ReservationCreateView(CreateView):
+class ReservationCreateView(AddTextContentMixin, LoginRequiredMixin, CreateView):
     model = Reservation
     form_class = ReservationForm
-    template_name = 'table_reservation/reservation_form.html'
+    template_name = 'table_reservation/reservation_form.html'  # type: ignore
     success_url = reverse_lazy('table_reservation:reservation-list')
 
+    def form_valid(self, form):
+        form.instance.owner = self.request.user
+        return super().form_valid(form)
 
-class ReservationListView(ListView):
+
+class ReservationListView(AddTextContentMixin, LoginRequiredMixin, OwnerOrModerReservationQuerysetMixin, ListView):
     model = Reservation
-    template_name = 'table_reservation/reservations_list.html'
+    template_name = 'table_reservation/reservations_list.html'  # type: ignore
     context_object_name = 'reservations'
 
 
-class ReservationDetailView(DetailView):
+class ReservationDetailView(AddTextContentMixin, LoginRequiredMixin, OwnerOrModerReservationQuerysetMixin, DetailView):
     model = Reservation
-    template_name = 'table_reservation/reservation_detail.html'
+    template_name = 'table_reservation/reservation_detail.html'  # type: ignore
     context_object_name = 'reservation'
 
 
-class ReservationUpdateView(UpdateView):
+class ReservationUpdateView(AddTextContentMixin, LoginRequiredMixin, OwnerOrModerReservationQuerysetMixin, UpdateView):
     model = Reservation
     form_class = ReservationForm
-    template_name = 'table_reservation/reservation_form.html'
+    template_name = 'table_reservation/reservation_form.html'  # type: ignore
     success_url = reverse_lazy('table_reservation:reservation-list')
 
 
-class ReservationDeleteView(DeleteView):
+class ReservationDeleteView(AddTextContentMixin, LoginRequiredMixin, OwnerOrModerReservationQuerysetMixin, DeleteView):
     model = Reservation
-    template_name = 'table_reservation/confirm_delete.html'
+    template_name = 'table_reservation/confirm_delete.html'  # type: ignore
     success_url = reverse_lazy('table_reservation:reservation-list')

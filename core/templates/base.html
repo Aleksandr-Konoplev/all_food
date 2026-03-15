@@ -19,11 +19,9 @@
                     <div class="row align-items-center g-4">
                         <div class="col-lg-7">
                             <span class="badge rounded-pill hero-badge px-3 py-2 mb-3">Бронирование столиков онлайн</span>
-                            <h1 class="display-6 fw-semibold mb-3">Уютный ресторан для теплых встреч и вкусных вечеров</h1>
-                            <p class="lead mb-4">Управляй бронированиями, показывай гостям атмосферу ресторана и принимай заявки через удобный интерфейс на Django.</p>
+                            <h1 class="display-6 fw-semibold mb-3">{{ greetings.content }}</h1>
                             <div class="d-flex flex-wrap gap-2">
                                 <a class="btn btn-light btn-lg" href="{% url 'table_reservation:reservation-create' %}">Забронировать столик</a>
-                                <a class="btn btn-outline-light btn-lg" href="/admin/">Открыть админку</a>
                             </div>
                         </div>
                         <div class="col-lg-5">
