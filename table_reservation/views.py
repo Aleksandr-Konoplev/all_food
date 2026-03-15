@@ -8,10 +8,11 @@ from django.views.generic.edit import CreateView, DeleteView, UpdateView
 from table_reservation.models import Reservation
 from table_reservation.forms import ReservationForm
 from table_reservation.mixins import OwnerOrModerReservationQuerysetMixin
+from core.mixins import AddTextContentMixin
 
 
 # CRUD Reservation
-class ReservationCreateView(LoginRequiredMixin, CreateView):
+class ReservationCreateView(AddTextContentMixin, LoginRequiredMixin, CreateView):
     model = Reservation
     form_class = ReservationForm
     template_name = 'table_reservation/reservation_form.html'  # type: ignore
@@ -22,26 +23,26 @@ class ReservationCreateView(LoginRequiredMixin, CreateView):
         return super().form_valid(form)
 
 
-class ReservationListView(LoginRequiredMixin, OwnerOrModerReservationQuerysetMixin, ListView):
+class ReservationListView(AddTextContentMixin, LoginRequiredMixin, OwnerOrModerReservationQuerysetMixin, ListView):
     model = Reservation
     template_name = 'table_reservation/reservations_list.html'  # type: ignore
     context_object_name = 'reservations'
 
 
-class ReservationDetailView(LoginRequiredMixin, OwnerOrModerReservationQuerysetMixin, DetailView):
+class ReservationDetailView(AddTextContentMixin, LoginRequiredMixin, OwnerOrModerReservationQuerysetMixin, DetailView):
     model = Reservation
     template_name = 'table_reservation/reservation_detail.html'  # type: ignore
     context_object_name = 'reservation'
 
 
-class ReservationUpdateView(LoginRequiredMixin, OwnerOrModerReservationQuerysetMixin, UpdateView):
+class ReservationUpdateView(AddTextContentMixin, LoginRequiredMixin, OwnerOrModerReservationQuerysetMixin, UpdateView):
     model = Reservation
     form_class = ReservationForm
     template_name = 'table_reservation/reservation_form.html'  # type: ignore
     success_url = reverse_lazy('table_reservation:reservation-list')
 
 
-class ReservationDeleteView(LoginRequiredMixin, OwnerOrModerReservationQuerysetMixin, DeleteView):
+class ReservationDeleteView(AddTextContentMixin, LoginRequiredMixin, OwnerOrModerReservationQuerysetMixin, DeleteView):
     model = Reservation
     template_name = 'table_reservation/confirm_delete.html'  # type: ignore
     success_url = reverse_lazy('table_reservation:reservation-list')

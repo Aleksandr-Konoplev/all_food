@@ -1,9 +1,11 @@
 from django.views.generic import TemplateView
 
-
-class HomePageView(TemplateView):
-    template_name = 'core/home.html'
+from core.mixins import AddTextContentMixin
 
 
-class AboutPageView(TemplateView):
-    template_name = 'core/about.html'
+class HomePageView(AddTextContentMixin, TemplateView):
+    template_name = 'core/home.html'  # noqa
+
+
+class AboutPageView(AddTextContentMixin, TemplateView):
+    template_name = 'core/about.html'  # noqa
