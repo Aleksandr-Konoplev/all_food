@@ -7,6 +7,7 @@ from django.views.generic import DetailView, ListView
 from django.views.generic.edit import CreateView, DeleteView, UpdateView
 
 from users.forms import UserRegisterForm, UserUpdateForm
+from users.mixins import UserAccessQuerysetMixin, ModeratorRequiredMixin
 from users.models import User
 
 
@@ -17,19 +18,19 @@ class UserCreateView(CreateView):
     success_url = reverse_lazy('users:login')
 
 
-class UserListView(ListView):
+class UserListView(ModeratorRequiredMixin, ListView):
     model = User
     template_name = 'users/users_list.html'  # type: ignore
     context_object_name = 'users'
 
 
-class UserDetailView(DetailView):
+class UserDetailView(UserAccessQuerysetMixin, DetailView):
     model = User
     template_name = 'users/user_detail.html'  # type: ignore
     context_object_name = 'user'
 
 
-class UserUpdateView(UpdateView):
+class UserUpdateView(UserAccessQuerysetMixin, UpdateView):
     model = User
     form_class = UserUpdateForm
     template_name = 'users/user_form.html'  # type: ignore
@@ -38,7 +39,7 @@ class UserUpdateView(UpdateView):
         return reverse_lazy('users:user-detail', kwargs={'pk': self.object.pk})
 
 
-class UserDeleteView(DeleteView):
+class UserDeleteView(UserAccessQuerysetMixin, DeleteView):
     model = User
     template_name = 'users/confirm_delete.html'  # type: ignore
     success_url = reverse_lazy('users:login')
