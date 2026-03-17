@@ -59,4 +59,44 @@
         </div>
     </div>
 </div>
+
+<script>
+document.addEventListener('DOMContentLoaded', function () {
+
+    function roundToStepUTC(step = 15) {
+        const date = new Date();
+        const ms = 1000 * 60 * step;
+
+        // округляем ВВЕРХ до ближайших 15 минут
+        const rounded = new Date(Math.ceil(date.getTime() / ms) * ms);
+
+        return rounded
+            .toISOString()
+            .slice(0, 16)
+            .replace('T', ' ');
+    }
+
+    flatpickr("input[name='start_at']", {
+        enableTime: true,
+        dateFormat: "Y-m-d H:i",
+        time_24hr: true,
+        allowInput: true,
+        utc: true,
+        minuteIncrement: 15,
+        defaultDate: roundToStepUTC()
+    });
+
+    flatpickr("input[name='end_at']", {
+        enableTime: true,
+        dateFormat: "Y-m-d H:i",
+        time_24hr: true,
+        allowInput: true,
+        utc: true,
+        minuteIncrement: 15,
+        defaultDate: roundToStepUTC()
+    });
+
+});
+</script>
+
 {% endblock %}
