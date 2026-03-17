@@ -4,10 +4,10 @@ from table_reservation.models import Reservation, Table
 
 @admin.register(Reservation)
 class ReservationAdmin(admin.ModelAdmin):
-    list_display = ('id', 'owner', 'date_visit', 'time_visit')
-    list_filter = ('table', 'time_visit', 'date_visit')
+    list_display = ('id', 'owner', 'start_at', 'end_at')
+    list_filter = ('table', 'start_at',)
     search_fields = ('owner__email',)
-    ordering = ('date_visit', 'time_visit',)
+    ordering = ('start_at',)
 
 
 @admin.register(Table)

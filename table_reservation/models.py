@@ -28,9 +28,8 @@ class Reservation(models.Model):
 
     owner = models.ForeignKey(User, on_delete=models.CASCADE, verbose_name='Пользователь совершивший бронирование')
 
-    date_visit = models.DateField(verbose_name='Дата визита')
-    time_visit = models.TimeField(verbose_name='Время визита')
-    duration_visit = models.PositiveIntegerField(verbose_name='Длительность (в минутах)', default=120)
+    start_at = models.DateTimeField(verbose_name='Начало бронирования')
+    end_at = models.DateTimeField(verbose_name='Конец бронирования')
 
     table = models.ForeignKey(Table, verbose_name='Номер столика', on_delete=models.CASCADE)
 

@@ -14,7 +14,7 @@
                     {% csrf_token %}
                     <div class="row g-3">
                         {% for field in form %}
-                            <div class="col-12 {% if field.name == 'date_visit' or field.name == 'time_visit' or field.name == 'duration_visit' or field.name == 'deposit' %}col-md-6{% endif %}">
+                            <div class="col-12 {% if field.name == 'start_at' or field.name == 'end_at' or field.name == 'deposit' %}col-md-6{% endif %}">
                                 <label class="form-label" for="{{ field.id_for_label }}">{{ field.label }}</label>
                                 {{ field }}
                                 {% if field.help_text %}
