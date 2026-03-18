@@ -25,16 +25,16 @@ class ReservationForm(forms.ModelForm):
         )
 
     def clean_start_at(self):
-        """Проверка выбранного времени кратности 15 минутам"""
+        """Проверка выбранного времени начала брони кратности 15 минутам"""
         value = self.cleaned_data["start_at"]
-        if value.minute % 15 != 0 or value.second != 0 or value.microsecond != 0:
+        if value.minute % 15 != 0:
             raise forms.ValidationError("Время начала должно быть кратно 15 минутам.")
         return value
 
     def clean_end_at(self):
-        """Проверка выбранного времени кратности 15 минутам"""
+        """Проверка выбранного времени окончания брони кратности 15 минутам"""
         value = self.cleaned_data["end_at"]
-        if value.minute % 15 != 0 or value.second != 0 or value.microsecond != 0:
+        if value.minute % 15 != 0:
             raise forms.ValidationError("Время окончания должно быть кратно 15 минутам.")
         return value
 
