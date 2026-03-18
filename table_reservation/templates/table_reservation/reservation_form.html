@@ -14,7 +14,7 @@
                     {% csrf_token %}
                     <div class="row g-3">
                         {% for field in form %}
-                            <div class="col-12 {% if field.name == 'date_visit' or field.name == 'time_visit' or field.name == 'duration_visit' or field.name == 'deposit' %}col-md-6{% endif %}">
+                            <div class="col-12 {% if field.name == 'start_at' or field.name == 'end_at' or field.name == 'deposit' %}col-md-6{% endif %}">
                                 <label class="form-label" for="{{ field.id_for_label }}">{{ field.label }}</label>
                                 {{ field }}
                                 {% if field.help_text %}
@@ -48,7 +48,24 @@
         <div class="card rounded-4 info-card mb-4">
             <div class="card-body p-4">
                 <h3 class="h5 mb-3">Доступность столиков</h3>
-                <p class="text-body-secondary mb-0">Пока это статичный блок, но сюда удобно вывести свободные столики и интервалы времени из базы данных.</p>
+                <form method="get" class="d-flex flex-wrap gap-2 mb-3">
+                    <input
+                        type="date"
+                        name="day"
+                        value="{{ selected_day }}"
+                        class="form-control"
+                        style="max-width: 220px;"
+                    >
+                    <button class="btn btn-outline-secondary" type="submit">Показать</button>
+                </form>
+
+                <ul class="list-unstyled mb-0">
+                    {% for busy_line in tables_busy_lines %}
+                        <li class="text-body-secondary mb-2">{{ busy_line }}</li>
+                    {% empty %}
+                        <li class="text-body-secondary mb-0">Столы пока не добавлены.</li>
+                    {% endfor %}
+                </ul>
             </div>
         </div>
         <div class="card rounded-4 info-card">
@@ -59,4 +76,44 @@
         </div>
     </div>
 </div>
+
+<script>
+document.addEventListener('DOMContentLoaded', function () {
+
+    function roundToStepUTC(step = 15) {
+        const date = new Date();
+        const ms = 1000 * 60 * step;
+
+        // округляем ВВЕРХ до ближайших 15 минут
+        const rounded = new Date(Math.ceil(date.getTime() / ms) * ms);
+
+        return rounded
+            .toISOString()
+            .slice(0, 16)
+            .replace('T', ' ');
+    }
+
+    flatpickr("input[name='start_at']", {
+        enableTime: true,
+        dateFormat: "Y-m-d H:i",
+        time_24hr: true,
+        allowInput: true,
+        utc: true,
+        minuteIncrement: 15,
+        defaultDate: roundToStepUTC()
+    });
+
+    flatpickr("input[name='end_at']", {
+        enableTime: true,
+        dateFormat: "Y-m-d H:i",
+        time_24hr: true,
+        allowInput: true,
+        utc: true,
+        minuteIncrement: 15,
+        defaultDate: roundToStepUTC()
+    });
+
+});
+</script>
+
 {% endblock %}

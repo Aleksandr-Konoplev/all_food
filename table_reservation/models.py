@@ -1,3 +1,4 @@
+from django.core.exceptions import ValidationError
 from django.core.validators import MaxValueValidator
 from django.db import models
 from users.models import User
@@ -28,12 +29,9 @@ class Reservation(models.Model):
 
     owner = models.ForeignKey(User, on_delete=models.CASCADE, verbose_name='Пользователь совершивший бронирование')
 
-    date_visit = models.DateField(verbose_name='Дата визита')
-    time_visit = models.TimeField(verbose_name='Время визита')
-    duration_visit = models.PositiveIntegerField(verbose_name='Длительность (в минутах)', default=120)
-
+    start_at = models.DateTimeField(verbose_name='Начало бронирования')
+    end_at = models.DateTimeField(verbose_name='Конец бронирования')
     table = models.ForeignKey(Table, verbose_name='Номер столика', on_delete=models.CASCADE)
-
     deposit = models.PositiveIntegerField(verbose_name='Сумма депозита', validators=[MaxValueValidator(50000)])
 
     class Meta:
@@ -42,3 +40,23 @@ class Reservation(models.Model):
 
     def __str__(self):
         return f'{self.owner} - {self.table}'
+
+    def clean(self):
+        super().clean()
+
+        # ----- Ищем пересечения времени бронирования по выбранному столику с уже существующими бронями -----
+        if self.table and self.start_at and self.end_at:
+            overlapping = Reservation.objects.filter(
+                table=self.table,
+                start_at__lt=self.end_at,
+                end_at__gt=self.start_at,
+            )
+
+            if self.pk:
+                overlapping = overlapping.exclude(pk=self.pk)
+
+            if overlapping.exists():
+                raise ValidationError({
+                    "table": "Этот столик уже забронирован на выбранное время."
+                })
+        # ---------------------------------------------------------------------------------------------------
