@@ -124,6 +124,8 @@ EMAIL_SERVICES = {
         'PORT': int(os.getenv('EMAIL_PORT_MAIN')),
         'USER': os.getenv('EMAIL_HOST_USER_MAIN'),
         'PASSWORD': os.getenv('EMAIL_HOST_PASSWORD_MAIN'),
+        'USE_TLS': True if os.getenv('EMAIL_USE_TLS_MAIN') == 'True' else False,
+        'USE_SSL': True if os.getenv('EMAIL_USE_SSL_MAIN') == 'True' else False,
     },
     # Почта для автоматических рассылок
     'auto': {
@@ -131,12 +133,12 @@ EMAIL_SERVICES = {
         'PORT': int(os.getenv('EMAIL_PORT_AUTO')),
         'USER': os.getenv('EMAIL_HOST_USER_AUTO'),
         'PASSWORD': os.getenv('EMAIL_HOST_PASSWORD_AUTO'),
+        'USE_TLS': True if os.getenv('EMAIL_USE_TLS_AUTO') == 'True' else False,
+        'USE_SSL': True if os.getenv('EMAIL_USE_SSL_AUTO') == 'True' else False,
     }
 }
 
 EMAIL_BACKEND = 'django.core.mail.backends.smtp.EmailBackend'
-EMAIL_USE_TLS = True if os.getenv('EMAIL_USE_TLS') == 'True' else False
-EMAIL_USE_SSL = True if os.getenv('EMAIL_USE_SSL') == 'True' else False
 
 # Главную почту используем по умолчанию
 SERVER_EMAIL = EMAIL_SERVICES['main']['USER']

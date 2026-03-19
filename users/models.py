@@ -9,6 +9,7 @@ class User(AbstractUser):
 
     username = None
     email = models.EmailField(unique=True, verbose_name='Email')
+    token = models.CharField(max_length=64, blank=True, null=True, unique=True, verbose_name='Токен')
     first_name = models.CharField(max_length=32, verbose_name='Имя')
     last_name = models.CharField(max_length=32, verbose_name='Фамилия', blank=True, null=True)
     phone_number = models.CharField(unique=True, max_length=20, verbose_name='Номер телефона', blank=True, null=True)
