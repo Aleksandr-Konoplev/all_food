@@ -1,18 +1,18 @@
 from django.views.generic import TemplateView
 
-from core.mixins import AddTextContentMixin
+from core.mixins import AddSiteContentMixin
 from table_reservation.models import Reservation
 
 
-class HomePageView(AddTextContentMixin, TemplateView):
+class HomePageView(AddSiteContentMixin, TemplateView):
     template_name = 'core/home.html'  # noqa
 
 
-class AboutPageView(AddTextContentMixin, TemplateView):
+class AboutPageView(AddSiteContentMixin, TemplateView):
     template_name = 'core/about.html'  # noqa
 
 
-class TestPageView(AddTextContentMixin, TemplateView):
+class TestPageView(AddSiteContentMixin, TemplateView):
     template_name = 'core/test_page.html'  # noqa
 
     def get_context_data(self, **kwargs):

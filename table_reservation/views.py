@@ -9,11 +9,11 @@ from django.views.generic.edit import CreateView, DeleteView, UpdateView
 from table_reservation.models import Reservation, Table
 from table_reservation.forms import ReservationForm
 from table_reservation.mixins import OwnerOrModerReservationQuerysetMixin
-from core.mixins import AddTextContentMixin
+from core.mixins import AddSiteContentMixin
 
 
 # CRUD Reservation
-class ReservationCreateView(AddTextContentMixin, LoginRequiredMixin, CreateView):
+class ReservationCreateView(AddSiteContentMixin, LoginRequiredMixin, CreateView):
     """Создание бронирования с показом занятости столов по выбранному дню."""
 
     model = Reservation
@@ -86,19 +86,19 @@ class ReservationCreateView(AddTextContentMixin, LoginRequiredMixin, CreateView)
         return super().form_valid(form)
 
 
-class ReservationListView(AddTextContentMixin, LoginRequiredMixin, OwnerOrModerReservationQuerysetMixin, ListView):
+class ReservationListView(AddSiteContentMixin, LoginRequiredMixin, OwnerOrModerReservationQuerysetMixin, ListView):
     model = Reservation
     template_name = 'table_reservation/reservations_list.html'  # type: ignore
     context_object_name = 'reservations'
 
 
-class ReservationDetailView(AddTextContentMixin, LoginRequiredMixin, OwnerOrModerReservationQuerysetMixin, DetailView):
+class ReservationDetailView(AddSiteContentMixin, LoginRequiredMixin, OwnerOrModerReservationQuerysetMixin, DetailView):
     model = Reservation
     template_name = 'table_reservation/reservation_detail.html'  # type: ignore
     context_object_name = 'reservation'
 
 
-class ReservationUpdateView(AddTextContentMixin, LoginRequiredMixin, OwnerOrModerReservationQuerysetMixin, UpdateView):
+class ReservationUpdateView(AddSiteContentMixin, LoginRequiredMixin, OwnerOrModerReservationQuerysetMixin, UpdateView):
     model = Reservation
     form_class = ReservationForm
     template_name = 'table_reservation/reservation_form.html'  # type: ignore
@@ -117,7 +117,7 @@ class ReservationUpdateView(AddTextContentMixin, LoginRequiredMixin, OwnerOrMode
         return super().form_valid(form)
 
 
-class ReservationDeleteView(AddTextContentMixin, LoginRequiredMixin, OwnerOrModerReservationQuerysetMixin, DeleteView):
+class ReservationDeleteView(AddSiteContentMixin, LoginRequiredMixin, OwnerOrModerReservationQuerysetMixin, DeleteView):
     model = Reservation
     template_name = 'table_reservation/confirm_delete.html'  # type: ignore
     success_url = reverse_lazy('table_reservation:reservation-list')

@@ -1,8 +1,8 @@
 from core.models import ContentForSite
 
 
-class AddTextContentMixin:
+class AddSiteContentMixin:
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
-        context['greetings'] = ContentForSite.objects.get(name_content='greetings')
+        context['greeting'] = ContentForSite.objects.get(name_content='greeting')
         return context
