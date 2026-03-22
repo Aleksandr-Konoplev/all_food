@@ -18,8 +18,8 @@
                     <tr>
                         <th class="px-4 py-3">№ брони</th>
                         <th class="px-4 py-3">Гость</th>
-                        <th class="py-3">Дата</th>
-                        <th class="py-3">Время</th>
+                        <th class="py-3">Начало брони</th>
+                        <th class="py-3">Конец брони</th>
                         <th class="py-3">Столик</th>
                         <th class="py-3">Депозит</th>
                     </tr>
@@ -29,8 +29,8 @@
                         <tr onclick="window.location='{% url 'table_reservation:reservation-detail' reservation.pk %}'" style="cursor: pointer;">
                             <td class="px-4">{{ reservation.pk }}</td>
                             <td class="px-4">{{ reservation.owner }}</td>
-                            <td>{{ reservation.date_visit }}</td>
-                            <td>{{ reservation.time_visit }}</td>
+                            <td>{{ reservation.start_at }}</td>
+                            <td>{{ reservation.end_at }}</td>
                             <td>{{ reservation.table }}</td>
                             <td>{{ reservation.deposit }}</td>
                         </tr>
