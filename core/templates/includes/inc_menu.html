@@ -21,7 +21,7 @@
                 </li>
                 {% if request.user|has_group:'moderator' %}
                 <li class="nav-item">
-                    <a class="nav-link" href="/admin/">Панель управления</a>
+                    <a class="nav-link" href="{% url 'core:control-panel' %}">Панель управления</a>
                 </li>
                 {% endif %}
             </ul>
