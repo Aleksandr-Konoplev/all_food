@@ -8,8 +8,7 @@
         <div class="card rounded-4 info-card h-100">
             <div class="card-body p-4 p-lg-5">
                 <span class="text-uppercase small fw-semibold text-warning-emphasis">О ресторане</span>
-                <h2 class="mt-2 mb-3">Место для семейных ужинов, свиданий и дружеских встреч</h2>
-                <p class="text-body-secondary mb-0">All Food объединяет уютную атмосферу, внимательный сервис и современную кухню. На сайте гости могут узнать о ресторане, оставить заявку и забронировать столик в пару кликов.</p>
+                <p class="text-body-secondary mb-0">{{ restaurant_description.text }}</p>
             </div>
         </div>
     </div>
@@ -17,9 +16,9 @@
         <div class="card rounded-4 info-card h-100">
             <div class="card-body p-4">
                 <h2 class="h5 mb-3">Контакты</h2>
-                <p class="mb-2"><strong>Адрес:</strong> ул. Гастрономическая, 7</p>
-                <p class="mb-2"><strong>Телефон:</strong> +7 (900) 123-45-67</p>
-                <p class="mb-0"><strong>Часы работы:</strong> ежедневно с 12:00 до 23:00</p>
+                <p class="mb-2"><strong>Адрес:</strong> {{ address.text }}</p>
+                <p class="mb-2"><strong>Телефон:</strong> {{ phone.text }}</p>
+                <p class="mb-0"><strong>Часы работы:</strong> {{ working_hours.text }}</p>
             </div>
         </div>
     </div>

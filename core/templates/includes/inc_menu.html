@@ -33,7 +33,6 @@
                     </span>
                     {% if request.user.pk %}
                         <a class="btn btn-outline-secondary btn-sm" href="{% url 'users:user-detail' request.user.pk %}">Профиль</a>
-                        <a class="btn btn-outline-secondary btn-sm" href="{% url 'users:user-update' request.user.pk %}">Редактировать</a>
                     {% endif %}
                     <form method="post" action="{% url 'users:logout' %}" class="m-0">
                         {% csrf_token %}
