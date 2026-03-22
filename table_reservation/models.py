@@ -45,6 +45,10 @@ class Reservation(models.Model):
     def clean(self):
         super().clean()
 
+        # Депозит всегда должен совпадать с минимальным депозитом выбранного столика.
+        if self.table:
+            self.deposit = self.table.min_deposit
+
         # ----- Ищем пересечения времени бронирования по выбранному столику с уже существующими бронями -----
         if self.table and self.start_at and self.end_at:
             overlapping = Reservation.objects.filter(

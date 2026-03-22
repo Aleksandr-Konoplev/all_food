@@ -14,7 +14,7 @@
                     {% csrf_token %}
                     <div class="row g-3">
                         {% for field in form %}
-                            <div class="col-12 {% if field.name == 'start_at' or field.name == 'end_at' or field.name == 'deposit' %}col-md-6{% endif %}">
+                            <div class="col-12 {% if field.name == 'start_at' or field.name == 'end_at' %}col-md-6{% endif %}">
                                 <label class="form-label" for="{{ field.id_for_label }}">{{ field.label }}</label>
                                 {{ field }}
                                 {% if field.help_text %}
@@ -25,6 +25,17 @@
                                 {% endfor %}
                             </div>
                         {% endfor %}
+                        <div class="col-12 col-md-6">
+                            <label class="form-label">Сумма депозита</label>
+                            <div class="form-control bg-body-tertiary" id="deposit-display">
+                                {% if form.instance.table_id %}
+                                    {{ form.instance.table.min_deposit }} ₽
+                                {% else %}
+                                    Выберите столик
+                                {% endif %}
+                            </div>
+                            <div class="form-text">Депозит определяется автоматически по выбранному столику.</div>
+                        </div>
                     </div>
 
                     {% if form.non_field_errors %}
@@ -77,8 +88,14 @@
     </div>
 </div>
 
+{{ table_deposits|json_script:"table-deposits-data" }}
+
 <script>
 document.addEventListener('DOMContentLoaded', function () {
+    const tableField = document.querySelector("select[name='table']");
+    const depositDisplay = document.getElementById('deposit-display');
+    const depositsDataNode = document.getElementById('table-deposits-data');
+    const tableDeposits = depositsDataNode ? JSON.parse(depositsDataNode.textContent) : {};
 
     function roundToStepUTC(step = 15) {
         const date = new Date();
@@ -91,6 +108,16 @@ document.addEventListener('DOMContentLoaded', function () {
             .toISOString()
             .slice(0, 16)
             .replace('T', ' ');
+    }
+
+    function updateDepositDisplay() {
+        // Обновляем отображаемый депозит сразу после выбора столика.
+        if (!tableField || !depositDisplay) {
+            return;
+        }
+
+        const deposit = tableDeposits[tableField.value];
+        depositDisplay.textContent = deposit ? `${deposit} ₽` : 'Выберите столик';
     }
 
     flatpickr("input[name='start_at']", {
@@ -112,6 +139,12 @@ document.addEventListener('DOMContentLoaded', function () {
         minuteIncrement: 15,
         defaultDate: roundToStepUTC()
     });
+
+    // Минимальный JavaScript используется только для смены текста на странице.
+    if (tableField) {
+        tableField.addEventListener('change', updateDepositDisplay);
+        updateDepositDisplay();
+    }
 
 });
 </script>
