@@ -73,11 +73,16 @@ class ReservationCreateView(AddTextContentMixin, LoginRequiredMixin, CreateView)
 
         context['selected_day'] = selected_day.isoformat()
         context['tables_busy_lines'] = tables_busy_lines
+
+        # Передаем в шаблон карту депозитов для мгновенного обновления отображаемой суммы.
+        form = context.get('form')
+        context['table_deposits'] = getattr(form, 'table_deposits', {}) if form else {}
         return context
 
     def form_valid(self, form):
-        """ Добавляем текущего пользователя как владельца брони """
+        """ Добавляем владельца и сохраняем депозит строго из минимального депозита столика. """
         form.instance.owner = self.request.user
+        form.instance.deposit = form.cleaned_data['table'].min_deposit
         return super().form_valid(form)
 
 
@@ -98,6 +103,18 @@ class ReservationUpdateView(AddTextContentMixin, LoginRequiredMixin, OwnerOrMode
     form_class = ReservationForm
     template_name = 'table_reservation/reservation_form.html'  # type: ignore
     success_url = reverse_lazy('table_reservation:reservation-list')
+
+    def get_context_data(self, **kwargs):
+        """ Передаем карту депозитов и при редактировании брони. """
+        context = super().get_context_data(**kwargs)
+        form = context.get('form')
+        context['table_deposits'] = getattr(form, 'table_deposits', {}) if form else {}
+        return context
+
+    def form_valid(self, form):
+        """ При редактировании депозит также пересчитывается только по выбранному столику. """
+        form.instance.deposit = form.cleaned_data['table'].min_deposit
+        return super().form_valid(form)
 
 
 class ReservationDeleteView(AddTextContentMixin, LoginRequiredMixin, OwnerOrModerReservationQuerysetMixin, DeleteView):

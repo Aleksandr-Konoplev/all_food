@@ -10,6 +10,7 @@ class Table(models.Model):
     num_table = models.PositiveIntegerField(verbose_name='Номер столика', unique=True, validators=[MaxValueValidator(6)])
     num_of_seats = models.PositiveIntegerField(verbose_name='Максимальное количество посадочных мест')
     description = models.CharField(verbose_name='Описание столика', max_length=400)
+    min_deposit = models.PositiveIntegerField(verbose_name='Минимальная сумма депозита', validators=[MaxValueValidator(50000)])
 
     class Meta:
         verbose_name = 'Стол'
@@ -43,6 +44,10 @@ class Reservation(models.Model):
 
     def clean(self):
         super().clean()
+
+        # Депозит всегда должен совпадать с минимальным депозитом выбранного столика.
+        if self.table:
+            self.deposit = self.table.min_deposit
 
         # ----- Ищем пересечения времени бронирования по выбранному столику с уже существующими бронями -----
         if self.table and self.start_at and self.end_at:
