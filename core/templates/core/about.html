@@ -3,56 +3,65 @@
 {% block title %}О ресторане | All Food{% endblock %}
 
 {% block content %}
+
 <div class="row g-4 mb-4">
     <div class="col-lg-7">
         <div class="card rounded-4 info-card h-100">
             <div class="card-body p-4 p-lg-5">
-                <span class="text-uppercase small fw-semibold text-warning-emphasis">Наша история</span>
-                <h2 class="mt-2 mb-3">Ресторан, который вырос из любви к теплому гостеприимству</h2>
-                <p class="text-body-secondary">All Food начинался как камерное место для друзей и семьи. Со временем проект вырос в ресторан, куда приходят за неспешными ужинами, праздниками и красивой подачей.</p>
-                <p class="text-body-secondary mb-0">Эта страница может стать основой для полноценного раздела о бренде, концепции кухни и атмосфере заведения.</p>
+                <span class="text-uppercase small fw-semibold text-warning-emphasis">История ресторана</span>
+                <h2 class="mt-2 mb-3">{{ history_restaurant.title }}</h2>
+                <p>{{ history_restaurant.text|linebreaks }}</p>
             </div>
         </div>
     </div>
     <div class="col-lg-5">
         <div class="card rounded-4 info-card h-100">
             <div class="card-body p-4 p-lg-5">
-                <h2 class="h4 mb-3">Миссия и ценности</h2>
-                <ul class="list-group list-group-flush">
-                    <li class="list-group-item px-0">Свежие продукты и понятное меню</li>
-                    <li class="list-group-item px-0">Искренний сервис без формальности</li>
-                    <li class="list-group-item px-0">Комфортная атмосфера для любого повода</li>
-                    <li class="list-group-item px-0 pb-0">Внимание к деталям в каждом бронировании</li>
-                </ul>
+                <span class="text-uppercase small fw-semibold text-warning-emphasis">Миссия и ценности</span>
+                <h2 class="h4 mt-2 mb-3">{{ mission_and_values.title }}</h2>
+                <p>{{ mission_and_values.text|linebreaks }}</p>
             </div>
         </div>
     </div>
 </div>
 
-<div class="row g-4">
-    <div class="col-md-4">
-        <div class="card rounded-4 info-card h-100">
-            <div class="card-body p-4">
-                <h3 class="h5">Шеф-повар</h3>
-                <p class="text-body-secondary mb-0">Отвечает за сезонное меню и авторские блюда, которые легко масштабировать в админке.</p>
+<section>
+    <div class="mb-3 px-4">
+        <div class="d-flex flex-column flex-md-row justify-content-between gap-2">
+            <div>
+                <span class="text-uppercase small fw-semibold text-warning-emphasis">Команда</span>
+                <h2 class="mt-2 mb-1">{{ description_team.title }}</h2>
+            </div>
+        </div>
+
+        <p class="text-body-secondary mb-0 mt-2">{{ description_team.text|linebreaks }}</p>
+    </div>
+
+    <div class="row g-4">
+        <div class="col-md-4">
+            <div class="card rounded-4 info-card h-100">
+                <div class="card-body p-4">
+                    <h3 class="h5 mb-3">{{ people_chef_cook.title }}</h3>
+                    <p class="text-body-secondary mb-0">{{ people_chef_cook.text|linebreaks }}</p>
+                </div>
+            </div>
+        </div>
+        <div class="col-md-4">
+            <div class="card rounded-4 info-card h-100">
+                <div class="card-body p-4">
+                    <h3 class="h5 mb-3">{{ people_hall_team.title }}</h3>
+                    <p class="text-body-secondary mb-0">{{ people_hall_team.text|linebreaks }}</p>
+                </div>
+            </div>
+        </div>
+        <div class="col-md-4">
+            <div class="card rounded-4 info-card h-100">
+                <div class="card-body p-4">
+                    <h3 class="h5 mb-3">{{ people_admin.title }}</h3>
+                    <p class="text-body-secondary mb-0">{{ people_admin.text|linebreaks }}</p>
+                </div>
             </div>
         </div>
     </div>
-    <div class="col-md-4">
-        <div class="card rounded-4 info-card h-100">
-            <div class="card-body p-4">
-                <h3 class="h5">Команда зала</h3>
-                <p class="text-body-secondary mb-0">Следит за тем, чтобы каждый гость чувствовал себя спокойно и желанно с первых минут.</p>
-            </div>
-        </div>
-    </div>
-    <div class="col-md-4">
-        <div class="card rounded-4 info-card h-100">
-            <div class="card-body p-4">
-                <h3 class="h5">Администратор</h3>
-                <p class="text-body-secondary mb-0">Управляет бронированиями, подтверждениями и наполнением сайта через Django admin.</p>
-            </div>
-        </div>
-    </div>
-</div>
+</section>
 {% endblock %}

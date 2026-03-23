@@ -69,7 +69,7 @@
                         <tbody>
                             {% for item in content_items %}
                             <tr>
-                                <td><strong>{{ item.name_content }}</strong></td>
+                                <td><strong>{{ item.name_tag }}</strong></td>
                                 <td class="text-body-secondary">
                                     {% if item.text %}
                                         {{ item.text|truncatechars:100 }}

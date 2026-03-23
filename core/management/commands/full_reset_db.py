@@ -1,40 +1,29 @@
-import psycopg2
-from django.conf import settings
 from django.core.management.base import BaseCommand
-from psycopg2.extensions import ISOLATION_LEVEL_AUTOCOMMIT
+from django.db import connection
 
 
 class Command(BaseCommand):
-    help = 'Удаляет и пересоздаёт базу данных (только для dev)'
+    help = "FULL reset for PostgreSQL (truncate, reset identity, cascade)"
 
     def handle(self, *args, **options):
-        db_name = settings.DATABASES['default']['NAME']
-        db_user = settings.DATABASES['default']['USER']
-        db_password = settings.DATABASES['default']['PASSWORD']
-        db_host = settings.DATABASES['default'].get('HOST', 'localhost')
-        db_port = settings.DATABASES['default'].get('PORT', 5432)
+        self.stdout.write(self.style.WARNING("POSTGRES FULL RESET"))
 
-        # Запрос подтверждения
-        confirm = input(f'Вы уверены, что хотите удалить базу "{db_name}" и создать заново? [y/N]: ')
-        if confirm.lower() != 'y':
-            self.stdout.write(self.style.WARNING('Операция отменена.'))
+        confirm = input("Type 'YES' to completely wipe the database: ")
+        if confirm != "YES":
+            self.stdout.write(self.style.ERROR("Operation cancelled"))
             return
 
-        # Подключаемся к postgres (не к удаляемой базе)
-        conn = psycopg2.connect(dbname="postgres", user=db_user, password=db_password, host=db_host, port=db_port)
-        conn.set_isolation_level(ISOLATION_LEVEL_AUTOCOMMIT)
-        cur = conn.cursor()
+        tables = connection.introspection.table_names()
+        if not tables:
+            self.stdout.write(self.style.WARNING("No tables found"))
+            return
 
-        # Удаляем базу, если существует
-        self.stdout.write(f'Удаляем базу {db_name}...')
-        # noinspection SqlNoDataSourceInspection
-        cur.execute(f'DROP DATABASE IF EXISTS "{db_name}";')
+        tables_sql = ', '.join(f'"{t}"' for t in tables)
 
-        # Создаём базу заново
-        self.stdout.write(f'Создаём базу {db_name}...')
-        # noinspection SqlNoDataSourceInspection
-        cur.execute(f'CREATE DATABASE "{db_name}";')
+        with connection.cursor() as cursor:
+            cursor.execute(f"""
+                TRUNCATE TABLE {tables_sql}
+                RESTART IDENTITY CASCADE;
+            """)
 
-        cur.close()
-        conn.close()
-        self.stdout.write(self.style.SUCCESS(f'База {db_name} успешно пересоздана!'))
+        self.stdout.write(self.style.SUCCESS("PostgreSQL DB reset complete"))

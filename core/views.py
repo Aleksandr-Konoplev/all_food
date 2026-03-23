@@ -15,15 +15,25 @@ class HomePageView(AddBaseContentMixin, TemplateView):
 
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)  # noqa
-        context['address'] = ContentForSite.objects.get(name_content='address')
-        context['phone'] = ContentForSite.objects.get(name_content='phone')
-        context['working_hours'] = ContentForSite.objects.get(name_content='working_hours')
-        context['restaurant_description'] = ContentForSite.objects.get(name_content='restaurant_description')
+        context['address'] = ContentForSite.objects.get(name_tag='address')
+        context['phone'] = ContentForSite.objects.get(name_tag='phone')
+        context['working_hours'] = ContentForSite.objects.get(name_tag='working_hours')
+        context['restaurant_description'] = ContentForSite.objects.get(name_tag='restaurant_description')
         return context
 
 
 class AboutPageView(AddBaseContentMixin, TemplateView):
     template_name = 'core/about.html'  # noqa
+
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        context['history_restaurant'] = ContentForSite.objects.get(name_tag='history_restaurant')
+        context['mission_and_values'] = ContentForSite.objects.get(name_tag='mission_and_values')
+        context['people_chef_cook'] = ContentForSite.objects.get(name_tag='people_chef_cook')
+        context['people_hall_team'] = ContentForSite.objects.get(name_tag='people_hall_team')
+        context['people_admin'] = ContentForSite.objects.get(name_tag='people_admin')
+        context['description_team'] = ContentForSite.objects.get(name_tag='description_team')
+        return context
 
 
 class ControlPanelView(ModeratorRequiredMixin, AddBaseContentMixin, TemplateView):
@@ -31,7 +41,7 @@ class ControlPanelView(ModeratorRequiredMixin, AddBaseContentMixin, TemplateView
 
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
-        content_items = ContentForSite.objects.order_by('name_content')
+        content_items = ContentForSite.objects.order_by('name_tag')
 
         context['stats_cards'] = [
             {'title': 'Контентных блоков', 'value': content_items.count(), 'description': 'Записи для текстов и изображений сайта.'},
