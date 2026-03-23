@@ -1,6 +1,6 @@
 from django.contrib import admin
 
-from .models import TextContent
+from .models import ContentForSite
 
 
-admin.site.register(TextContent)
+admin.site.register(ContentForSite)

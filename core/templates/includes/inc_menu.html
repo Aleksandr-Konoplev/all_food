@@ -21,7 +21,7 @@
                 </li>
                 {% if request.user|has_group:'moderator' %}
                 <li class="nav-item">
-                    <a class="nav-link" href="/admin/">Админка</a>
+                    <a class="nav-link" href="{% url 'core:control-panel' %}">Панель управления</a>
                 </li>
                 {% endif %}
             </ul>
@@ -33,7 +33,6 @@
                     </span>
                     {% if request.user.pk %}
                         <a class="btn btn-outline-secondary btn-sm" href="{% url 'users:user-detail' request.user.pk %}">Профиль</a>
-                        <a class="btn btn-outline-secondary btn-sm" href="{% url 'users:user-update' request.user.pk %}">Редактировать</a>
                     {% endif %}
                     <form method="post" action="{% url 'users:logout' %}" class="m-0">
                         {% csrf_token %}

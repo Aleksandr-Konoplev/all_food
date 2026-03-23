@@ -1,24 +1,70 @@
+from django.urls import reverse
 from django.views.generic import TemplateView
+from django.views.generic.edit import UpdateView
 
-from core.mixins import AddTextContentMixin
-from table_reservation.models import Reservation
+from core.forms import ContentForSiteForm
+from core.mixins import AddBaseContentMixin
+from core.models import ContentForSite
+from table_reservation.models import Reservation, Table
+from users.mixins import ModeratorRequiredMixin
+from users.models import User
 
 
-class HomePageView(AddTextContentMixin, TemplateView):
+class HomePageView(AddBaseContentMixin, TemplateView):
     template_name = 'core/home.html'  # noqa
 
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)  # noqa
+        context['address'] = ContentForSite.objects.get(name_content='address')
+        context['phone'] = ContentForSite.objects.get(name_content='phone')
+        context['working_hours'] = ContentForSite.objects.get(name_content='working_hours')
+        context['restaurant_description'] = ContentForSite.objects.get(name_content='restaurant_description')
+        return context
 
-class AboutPageView(AddTextContentMixin, TemplateView):
+
+class AboutPageView(AddBaseContentMixin, TemplateView):
     template_name = 'core/about.html'  # noqa
 
 
-class TestPageView(AddTextContentMixin, TemplateView):
+class ControlPanelView(ModeratorRequiredMixin, AddBaseContentMixin, TemplateView):
+    template_name = 'core/control_panel.html'  # noqa
+
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        content_items = ContentForSite.objects.order_by('name_content')
+
+        context['stats_cards'] = [
+            {'title': 'Контентных блоков', 'value': content_items.count(), 'description': 'Записи для текстов и изображений сайта.'},
+            {'title': 'Пользователей', 'value': User.objects.count(), 'description': 'Все зарегистрированные аккаунты.'},
+            {'title': 'Столиков', 'value': Table.objects.count(), 'description': 'Доступные столики для бронирования.'},
+            {'title': 'Бронирований', 'value': Reservation.objects.count(), 'description': 'Все созданные бронирования.'},
+        ]
+        context['content_items'] = content_items
+        context['quick_links'] = [
+            {'label': 'Админка Django', 'href': '/admin/'},
+            {'label': 'Тестовая страница', 'url_name': 'core:test-page'},
+            {'label': 'Список бронирований', 'url_name': 'table_reservation:reservation-list'},
+            {'label': 'Список пользователей', 'url_name': 'users:users-list'},
+        ]
+        return context
+
+
+class ContentUpdateView(ModeratorRequiredMixin, UpdateView):
+    model = ContentForSite
+    form_class = ContentForSiteForm
+    template_name = 'core/content_update.html'  # noqa
+
+    def get_success_url(self):
+        return reverse('core:content-update', kwargs={'pk': self.object.pk})
+
+
+class TestPageView(AddBaseContentMixin, TemplateView):
     template_name = 'core/test_page.html'  # noqa
 
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
         user = self.request.user
-        reservation = Reservation.objects.order_by('pk').first()  # type: ignore[attr-defined]
+        reservation = Reservation.objects.order_by('pk').first()  # type: ignore
 
         user_pk = user.pk if user.is_authenticated else None
         reservation_pk = reservation.pk if reservation else None
