@@ -23,7 +23,7 @@ class HomePageView(AddBaseContentMixin, TemplateView):
 
 
 class AboutPageView(AddBaseContentMixin, TemplateView):
-    template_name = 'core/about.html'  # noqa
+    template_name = 'core/about_fix.html'  # noqa
 
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
