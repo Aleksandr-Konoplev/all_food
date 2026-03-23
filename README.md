@@ -122,13 +122,13 @@ python manage.py custom_csu
     сделали выгрузку данных (если они нужны) 
     - `python manage.py migrate` - Применить миграции
   - *Контент*
-    - `python manage.py dumpdata core.ContentForSite --indent 4 --output core/fixtures/content_for_site.json` - 
-    Сохранение столов в json-файл из БД. 
+    - `python manage.py dumpfixture core.ContentForSite core/fixtures/content_for_site.json` - 
+    Сохранение блоков контента в json-файл из БД. 
     - `python manage.py loaddata core/fixtures/default_content_for_site.json` - Загрузка блоков контента для наполнения 
     сайта в базу данных (измените имя json-файла для загрузки ранее сохранённой схемы столов)
 
   - *Столы*
-    - `python manage.py dumpdata table_reservation.Table --indent 4 --output core/fixtures/tables.json` - 
+    - `python manage.py dumpfixture table_reservation.Table core/fixtures/tables.json` - 
     Сохранение столов в json-файл из БД.
     - `python manage.py loaddata core/fixtures/default_tables.json` - Загрузка схемы столов в базу данных (измените имя
     json-файла для загрузки ранее сохранённой схемы столов)
