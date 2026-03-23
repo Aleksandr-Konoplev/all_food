@@ -3,4 +3,13 @@ from django.contrib import admin
 from .models import ContentForSite
 
 
-admin.site.register(ContentForSite)
+@admin.register(ContentForSite)
+class ContentForSiteAdmin(admin.ModelAdmin):
+    list_display = ('name_tag', 'title', 'short_text')
+    search_fields = ('name_tag', 'title')
+
+    def short_text(self, obj):
+        if len(obj.text) > 60:
+            return obj.text[:57] + '...'
+        return obj.text
+    short_text.short_description = 'Text'
