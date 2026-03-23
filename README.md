@@ -114,15 +114,25 @@ python manage.py custom_csu
 
 ## Полезные management-команды
 
-```bash
-python manage.py custom_csu
-python manage.py load_tables --path core/fixtures/tables.json
-python manage.py full_reset_db
-```
+- **Пользователь**
+  - `python manage.py custom_csu` - Создание суперпользователя.
+- **База данных**
+  - *Сброс и восстановление схем*
+    - `python manage.py full_reset_db` - **ВНИМАНИЕ!** Полная очистка базы данных. Перед выполнением убедитесь что вы
+    сделали выгрузку данных (если они нужны) 
+    - `python manage.py migrate` - Применить миграции
+  - *Контент*
+    - `python manage.py dumpdata core.ContentForSite --indent 4 --output core/fixtures/content_for_site.json` - 
+    Сохранение столов в json-файл из БД. 
+    - `python manage.py loaddata core/fixtures/default_content_for_site.json` - Загрузка блоков контента для наполнения 
+    сайта в базу данных (измените имя json-файла для загрузки ранее сохранённой схемы столов)
 
-- `custom_csu` - создание суперпользователя для кастомной модели
-- `load_tables` - загрузка столиков из JSON
-- `full_reset_db` - полное удаление и пересоздание dev-базы PostgreSQL с подтверждением в консоли
+  - *Столы*
+    - `python manage.py dumpdata table_reservation.Table --indent 4 --output core/fixtures/tables.json` - 
+    Сохранение столов в json-файл из БД.
+    - `python manage.py loaddata core/fixtures/default_tables.json` - Загрузка схемы столов в базу данных (измените имя
+    json-файла для загрузки ранее сохранённой схемы столов)
+
 
 ## Текущие маршруты
 
