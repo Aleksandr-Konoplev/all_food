@@ -1,0 +1,56 @@
+{% extends 'base.html' %}
+
+{% block title %}Контент сайта | All Food{% endblock %}
+
+{% block content %}
+<div class="d-flex flex-column flex-md-row justify-content-between align-items-md-center gap-3 mb-4">
+    <div>
+        <h2 class="mb-1">Контентные блоки сайта</h2>
+        <p class="text-body-secondary mb-0">Все записи `ContentForSite`, доступные для редактирования.</p>
+    </div>
+    <a class="btn btn-outline-dark" href="{% url 'core:control-panel' %}">Панель управления</a>
+</div>
+
+<div class="card rounded-4 info-card">
+    <div class="card-body p-0">
+        <div class="table-responsive">
+            <table class="table align-middle mb-0">
+                <thead class="table-light">
+                    <tr>
+                        <th class="px-4 py-3">Ключ</th>
+                        <th class="py-3">Заголовок</th>
+                        <th class="py-3">Текст</th>
+                        <th class="py-3">Изображение</th>
+                        <th class="px-4 py-3 text-end">Действия</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {% for item in content_items %}
+                    <tr>
+                        <td class="px-4"><strong>{{ item.name_tag }}</strong></td>
+                        <td>{{ item.title|default:'-' }}</td>
+                        <td class="text-body-secondary">{{ item.text|default:'Текст пока не заполнен.'|truncatechars:120 }}</td>
+                        <td>
+                            {% if item.image %}
+                            <span class="badge text-bg-success-subtle border border-success-subtle text-success-emphasis">Загружено</span>
+                            {% else %}
+                            <span class="badge text-bg-secondary">Нет файла</span>
+                            {% endif %}
+                        </td>
+                        <td class="px-4 text-end">
+                            <a class="btn btn-sm btn-dark" href="{% url 'core:content-update' item.pk %}">Редактировать</a>
+                        </td>
+                    </tr>
+                    {% empty %}
+                    <tr>
+                        <td class="px-4 py-4 text-body-secondary" colspan="5">
+                            Записей `ContentForSite` пока нет.
+                        </td>
+                    </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+        </div>
+    </div>
+</div>
+{% endblock %}
