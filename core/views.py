@@ -94,19 +94,19 @@ class ContentUpdateView(ModeratorRequiredMixin, UpdateView):
 
 
 # Отзывы
-class FeedbackListView(ListView):
+class FeedbackListView(ModeratorRequiredMixin, ListView):
     model = Feedback
     template_name = 'core/feedbacks_list.html'
     context_object_name = 'feedbacks'
 
 
-class FeedbackDetailView(DetailView):
+class FeedbackDetailView(ModeratorRequiredMixin, DetailView):
     model = Feedback
     template_name = 'core/feedback_detail.html'
     context_object_name = 'feedback'
 
 
-class FeedbackDeleteView(DeleteView):
+class FeedbackDeleteView(ModeratorRequiredMixin, DeleteView):
     model = Feedback
     template_name = 'core/confirm_delete_feedback.html'
     success_url = reverse_lazy('core:feedbacks-list')
