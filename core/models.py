@@ -25,11 +25,11 @@ class Feedback(models.Model):
 
     owner = models.ForeignKey('users.User', on_delete=models.CASCADE, blank=True, null=True)
 
-    user_name = models.CharField(max_length=100, blank=True, null=True)
+    user_name = models.CharField(max_length=100, blank=True, null=True, verbose_name='Имя')
 
-    phone = models.CharField(max_length=15, blank=True, null=True)
+    phone = models.CharField(max_length=15, blank=True, null=True, verbose_name='Телефон')
 
-    email = models.EmailField(blank=True, null=True)
+    email = models.EmailField(blank=True, null=True, verbose_name='Email')
 
     body = models.TextField()
 
