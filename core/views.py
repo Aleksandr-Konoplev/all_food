@@ -1,8 +1,8 @@
-from django.urls import reverse
+from django.urls import reverse, reverse_lazy
 from django.views.generic import TemplateView
-from django.views.generic.edit import UpdateView
+from django.views.generic.edit import UpdateView, FormMixin
 
-from core.forms import ContentForSiteForm
+from core.forms import ContentForSiteForm, FeedbackForm
 from core.mixins import AddBaseContentMixin
 from core.models import ContentForSite
 from table_reservation.models import Reservation, Table
@@ -10,8 +10,10 @@ from users.mixins import ModeratorRequiredMixin
 from users.models import User
 
 
-class HomePageView(AddBaseContentMixin, TemplateView):
+class HomePageView(AddBaseContentMixin, FormMixin, TemplateView):
     template_name = 'core/home.html'  # noqa
+    success_url = reverse_lazy('core:home')
+    form_class = FeedbackForm
 
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)  # noqa
@@ -20,6 +22,29 @@ class HomePageView(AddBaseContentMixin, TemplateView):
         context['working_hours'] = ContentForSite.objects.get(name_tag='working_hours')
         context['restaurant_description'] = ContentForSite.objects.get(name_tag='restaurant_description')
         return context
+
+    def get_form_kwargs(self):
+        kwargs = super().get_form_kwargs()
+        kwargs['user'] = self.request.user
+        return kwargs
+
+    def post(self, request, *args, **kwargs):
+        form = self.get_form()
+
+        if form.is_valid():
+            feedback = form.save(commit=False)
+            if request.user.is_authenticated:
+                feedback.owner = request.user
+            feedback.save()
+            return self.form_valid(form)
+
+        return self.form_invalid(form)
+
+    def form_valid(self, form):
+        return super().form_valid(form)
+
+    def form_invalid(self, form):
+        return self.render_to_response(self.get_context_data(form=form))
 
 
 class AboutPageView(AddBaseContentMixin, TemplateView):
