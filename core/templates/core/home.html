@@ -62,24 +62,51 @@
 <div class="row g-4">
     <div class="col-lg-7">
         <div class="card rounded-4 info-card h-100">
+            {# Форма обратной связи #}
             <div class="card-body p-4 p-lg-5">
                 <h2 class="h4 mb-3">Оставьте сообщение</h2>
-                <form>
+                <form method="post">
+                    {% csrf_token %}
                     <div class="row g-3">
                         <div class="col-md-6">
-                            <label class="form-label" for="feedback-name">Ваше имя</label>
-                            <input class="form-control" id="feedback-name" type="text" placeholder="Например, Анна">
+                            <label class="form-label" for="{{ form.user_name.id_for_label }}">{{ form.user_name.label }}</label>
+                            {{ form.user_name }}
+                            {% for error in form.user_name.errors %}
+                                <div class="text-danger small mt-1">{{ error }}</div>
+                            {% endfor %}
                         </div>
                         <div class="col-md-6">
-                            <label class="form-label" for="feedback-phone">Телефон</label>
-                            <input class="form-control" id="feedback-phone" type="text" placeholder="+7 (900) 000-00-00">
+                            <label class="form-label" for="{{ form.phone.id_for_label }}">{{ form.phone.label }}</label>
+                            {{ form.phone }}
+                            {% for error in form.phone.errors %}
+                                <div class="text-danger small mt-1">{{ error }}</div>
+                            {% endfor %}
                         </div>
                         <div class="col-12">
-                            <label class="form-label" for="feedback-message">Сообщение</label>
-                            <textarea class="form-control" id="feedback-message" rows="5" placeholder="Напишите ваш вопрос или пожелание"></textarea>
+                            <label class="form-label" for="{{ form.email.id_for_label }}">{{ form.email.label }}</label>
+                            {{ form.email }}
+                            {% for error in form.email.errors %}
+                                <div class="text-danger small mt-1">{{ error }}</div>
+                            {% endfor %}
                         </div>
                         <div class="col-12">
-                            <button class="btn btn-dark" type="button">Отправить</button>
+                            <label class="form-label" for="{{ form.body.id_for_label }}">{{ form.body.label }}</label>
+                            {{ form.body }}
+                            {% for error in form.body.errors %}
+                                <div class="text-danger small mt-1">{{ error }}</div>
+                            {% endfor %}
+                        </div>
+                        {% if form.non_field_errors %}
+                            <div class="col-12">
+                                <div class="alert alert-danger mb-0">
+                                    {% for error in form.non_field_errors %}
+                                        <div>{{ error }}</div>
+                                    {% endfor %}
+                                </div>
+                            </div>
+                        {% endif %}
+                        <div class="col-12">
+                            <button class="btn btn-dark" type="submit">Отправить</button>
                         </div>
                     </div>
                 </form>

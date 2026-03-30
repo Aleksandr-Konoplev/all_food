@@ -1,6 +1,6 @@
 from django.contrib import admin
 
-from .models import ContentForSite
+from .models import ContentForSite, Feedback
 
 
 @admin.register(ContentForSite)
@@ -13,3 +13,9 @@ class ContentForSiteAdmin(admin.ModelAdmin):
             return obj.text[:57] + '...'
         return obj.text
     short_text.short_description = 'Text'
+
+
+@admin.register(Feedback)
+class FeedbackAdmin(admin.ModelAdmin):
+    list_display = ('owner', 'user_name', 'body')
+    search_fields = ('owner__email', 'phone')

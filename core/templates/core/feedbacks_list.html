@@ -1,0 +1,53 @@
+{% extends 'base.html' %}
+
+{% block title %}Обратная связь | All Food{% endblock %}
+
+{% block content %}
+<div class="d-flex flex-column flex-md-row justify-content-between align-items-md-center gap-3 mb-4">
+    <div>
+        <h2 class="mb-1">Сообщения обратной связи</h2>
+        <p class="text-body-secondary mb-0">Просмотр всех обращений, отправленных через сайт.</p>
+    </div>
+    <a class="btn btn-outline-dark" href="{% url 'core:control-panel' %}">Панель управления</a>
+</div>
+
+<div class="card rounded-4 info-card">
+    <div class="card-body p-0">
+        <div class="table-responsive">
+            <table class="table align-middle mb-0">
+                <thead class="table-light">
+                    <tr>
+                        <th class="px-4 py-3">ID</th>
+                        <th class="py-3">Отправитель</th>
+                        <th class="py-3">Телефон</th>
+                        <th class="py-3">Email</th>
+                        <th class="py-3">Сообщение</th>
+                        <th class="px-4 py-3 text-end">Действия</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {% for feedback in feedbacks %}
+                    <tr>
+                        <td class="px-4">{{ feedback.pk }}</td>
+                        <td>{{ feedback.owner|default:feedback.user_name|default:'Анонимно' }}</td>
+                        <td>{{ feedback.phone|default:'-' }}</td>
+                        <td>{{ feedback.email|default:'-' }}</td>
+                        <td class="text-body-secondary">{{ feedback.body|truncatechars:80 }}</td>
+                        <td class="px-4 text-end">
+                            <a class="btn btn-sm btn-outline-dark" href="{% url 'core:feedback-detail' feedback.pk %}">Открыть</a>
+                            <a class="btn btn-sm btn-outline-danger" href="{% url 'core:feedback-delete' feedback.pk %}">Удалить</a>
+                        </td>
+                    </tr>
+                    {% empty %}
+                    <tr>
+                        <td class="px-4 py-4 text-body-secondary" colspan="6">
+                            Сообщений пока нет.
+                        </td>
+                    </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+        </div>
+    </div>
+</div>
+{% endblock %}

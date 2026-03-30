@@ -1,17 +1,19 @@
-from django.urls import reverse
-from django.views.generic import TemplateView
-from django.views.generic.edit import UpdateView
+from django.urls import reverse, reverse_lazy
+from django.views.generic import TemplateView, ListView, DetailView, DeleteView
+from django.views.generic.edit import UpdateView, FormMixin
 
-from core.forms import ContentForSiteForm
+from core.forms import ContentForSiteForm, FeedbackForm
 from core.mixins import AddBaseContentMixin
-from core.models import ContentForSite
+from core.models import ContentForSite, Feedback
 from table_reservation.models import Reservation, Table
 from users.mixins import ModeratorRequiredMixin
 from users.models import User
 
 
-class HomePageView(AddBaseContentMixin, TemplateView):
+class HomePageView(AddBaseContentMixin, FormMixin, TemplateView):
     template_name = 'core/home.html'  # noqa
+    success_url = reverse_lazy('core:home')
+    form_class = FeedbackForm
 
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)  # noqa
@@ -20,6 +22,29 @@ class HomePageView(AddBaseContentMixin, TemplateView):
         context['working_hours'] = ContentForSite.objects.get(name_tag='working_hours')
         context['restaurant_description'] = ContentForSite.objects.get(name_tag='restaurant_description')
         return context
+
+    def get_form_kwargs(self):
+        kwargs = super().get_form_kwargs()
+        kwargs['user'] = self.request.user
+        return kwargs
+
+    def post(self, request, *args, **kwargs):
+        form = self.get_form()
+
+        if form.is_valid():
+            feedback = form.save(commit=False)
+            if request.user.is_authenticated:
+                feedback.owner = request.user
+            feedback.save()
+            return self.form_valid(form)
+
+        return self.form_invalid(form)
+
+    def form_valid(self, form):
+        return super().form_valid(form)
+
+    def form_invalid(self, form):
+        return self.render_to_response(self.get_context_data(form=form))
 
 
 class AboutPageView(AddBaseContentMixin, TemplateView):
@@ -41,22 +66,32 @@ class ControlPanelView(ModeratorRequiredMixin, AddBaseContentMixin, TemplateView
 
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
-        content_items = ContentForSite.objects.order_by('name_tag')
+        count_feedback = Feedback.objects.count()
 
         context['stats_cards'] = [
-            {'title': 'Контентных блоков', 'value': content_items.count(), 'description': 'Записи для текстов и изображений сайта.'},
+            {'title': 'Сообщения клиентов', 'value': count_feedback, 'description': 'Сообщения от клиентов присланные через форму.'},
             {'title': 'Пользователей', 'value': User.objects.count(), 'description': 'Все зарегистрированные аккаунты.'},
             {'title': 'Столиков', 'value': Table.objects.count(), 'description': 'Доступные столики для бронирования.'},
             {'title': 'Бронирований', 'value': Reservation.objects.count(), 'description': 'Все созданные бронирования.'},
         ]
-        context['content_items'] = content_items
         context['quick_links'] = [
             {'label': 'Админка Django', 'href': '/admin/'},
+            {'label': 'Контент сайта', 'url_name': 'core:content-list'},
+            {'label': 'Сообщения обратной связи', 'url_name': 'core:feedbacks-list'},
             {'label': 'Тестовая страница', 'url_name': 'core:test-page'},
             {'label': 'Список бронирований', 'url_name': 'table_reservation:reservation-list'},
             {'label': 'Список пользователей', 'url_name': 'users:users-list'},
         ]
         return context
+
+
+class ContentListView(ModeratorRequiredMixin, ListView):
+    model = ContentForSite
+    template_name = 'core/content_list.html'  # noqa
+    context_object_name = 'content_items'
+
+    def get_queryset(self):
+        return ContentForSite.objects.order_by('name_tag')
 
 
 class ContentUpdateView(ModeratorRequiredMixin, UpdateView):
@@ -68,6 +103,26 @@ class ContentUpdateView(ModeratorRequiredMixin, UpdateView):
         return reverse('core:content-update', kwargs={'pk': self.object.pk})
 
 
+# Отзывы
+class FeedbackListView(ModeratorRequiredMixin, ListView):
+    model = Feedback
+    template_name = 'core/feedbacks_list.html'  # noqa
+    context_object_name = 'feedbacks'
+
+
+class FeedbackDetailView(ModeratorRequiredMixin, DetailView):
+    model = Feedback
+    template_name = 'core/feedback_detail.html'  # noqa
+    context_object_name = 'feedback'
+
+
+class FeedbackDeleteView(ModeratorRequiredMixin, DeleteView):
+    model = Feedback
+    template_name = 'core/confirm_delete_feedback.html'  # noqa
+    success_url = reverse_lazy('core:feedbacks-list')
+
+
+# Страница для тестирования эндпоинтов. Удалить перед деплоем!
 class TestPageView(AddBaseContentMixin, TemplateView):
     template_name = 'core/test_page.html'  # noqa
 
