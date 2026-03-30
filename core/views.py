@@ -1,10 +1,10 @@
 from django.urls import reverse, reverse_lazy
-from django.views.generic import TemplateView
+from django.views.generic import TemplateView, ListView, DetailView, DeleteView
 from django.views.generic.edit import UpdateView, FormMixin
 
 from core.forms import ContentForSiteForm, FeedbackForm
 from core.mixins import AddBaseContentMixin
-from core.models import ContentForSite
+from core.models import ContentForSite, Feedback
 from table_reservation.models import Reservation, Table
 from users.mixins import ModeratorRequiredMixin
 from users.models import User
@@ -93,6 +93,26 @@ class ContentUpdateView(ModeratorRequiredMixin, UpdateView):
         return reverse('core:content-update', kwargs={'pk': self.object.pk})
 
 
+# Отзывы
+class FeedbackListView(ListView):
+    model = Feedback
+    template_name = 'core/feedbacks_list.html'
+    context_object_name = 'feedbacks'
+
+
+class FeedbackDetailView(DetailView):
+    model = Feedback
+    template_name = 'core/feedback_detail.html'
+    context_object_name = 'feedback'
+
+
+class FeedbackDeleteView(DeleteView):
+    model = Feedback
+    template_name = 'core/confirm_delete_feedback.html'
+    success_url = reverse_lazy('core:feedbacks-list')
+
+
+# Страница для тестирования эндпоинтов. Удалить перед деплоем!
 class TestPageView(AddBaseContentMixin, TemplateView):
     template_name = 'core/test_page.html'  # noqa
 
