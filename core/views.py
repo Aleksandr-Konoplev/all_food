@@ -77,6 +77,7 @@ class ControlPanelView(ModeratorRequiredMixin, AddBaseContentMixin, TemplateView
         context['content_items'] = content_items
         context['quick_links'] = [
             {'label': 'Админка Django', 'href': '/admin/'},
+            {'label': 'Сообщения обратной связи', 'url_name': 'core:feedbacks-list'},
             {'label': 'Тестовая страница', 'url_name': 'core:test-page'},
             {'label': 'Список бронирований', 'url_name': 'table_reservation:reservation-list'},
             {'label': 'Список пользователей', 'url_name': 'users:users-list'},
@@ -96,19 +97,19 @@ class ContentUpdateView(ModeratorRequiredMixin, UpdateView):
 # Отзывы
 class FeedbackListView(ModeratorRequiredMixin, ListView):
     model = Feedback
-    template_name = 'core/feedbacks_list.html'
+    template_name = 'core/feedbacks_list.html'  # noqa
     context_object_name = 'feedbacks'
 
 
 class FeedbackDetailView(ModeratorRequiredMixin, DetailView):
     model = Feedback
-    template_name = 'core/feedback_detail.html'
+    template_name = 'core/feedback_detail.html'  # noqa
     context_object_name = 'feedback'
 
 
 class FeedbackDeleteView(ModeratorRequiredMixin, DeleteView):
     model = Feedback
-    template_name = 'core/confirm_delete_feedback.html'
+    template_name = 'core/confirm_delete_feedback.html'  # noqa
     success_url = reverse_lazy('core:feedbacks-list')
 
 

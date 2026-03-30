@@ -1,0 +1,39 @@
+{% extends 'base.html' %}
+
+{% block title %}Сообщение обратной связи | All Food{% endblock %}
+
+{% block content %}
+<div class="row g-4">
+    <div class="col-12">
+        <div class="card rounded-4 info-card">
+            <div class="card-body p-4 p-lg-5">
+                <span class="badge text-bg-warning-subtle text-warning-emphasis rounded-pill mb-3">Обратная связь</span>
+                <h2 class="mb-3">Сообщение №{{ feedback.pk }}</h2>
+                <p class="text-body-secondary mb-4">Детали обращения.</p>
+
+                <dl class="row mb-0">
+                    <dt class="col-sm-3">Пользователь</dt>
+                    <dd class="col-sm-9">{{ feedback.owner|default:'-' }}</dd>
+
+                    <dt class="col-sm-3">Имя</dt>
+                    <dd class="col-sm-9">{{ feedback.user_name|default:'-' }}</dd>
+
+                    <dt class="col-sm-3">Телефон</dt>
+                    <dd class="col-sm-9">{{ feedback.phone|default:'-' }}</dd>
+
+                    <dt class="col-sm-3">Email</dt>
+                    <dd class="col-sm-9">{{ feedback.email|default:'-' }}</dd>
+
+                    <dt class="col-sm-3">Текст сообщения</dt>
+                    <dd class="col-sm-9">{{ feedback.body|linebreaksbr }}</dd>
+                </dl>
+
+                <div class="mt-4 d-flex flex-wrap gap-2">
+                    <a href="{% url 'core:feedbacks-list' %}" class="btn btn-outline-secondary">К списку сообщений</a>
+                    <a href="{% url 'core:feedback-delete' feedback.pk %}" class="btn btn-outline-danger">Удалить</a>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}
