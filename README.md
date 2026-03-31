@@ -132,6 +132,11 @@ python manage.py custom_csu
     Сохранение столов в json-файл из БД.
     - `python manage.py loaddata core/fixtures/default_tables.json` - Загрузка схемы столов в базу данных (измените имя
     json-файла для загрузки ранее сохранённой схемы столов)
+  - *Группы прав доступа*
+    - `python manage.py dumpdata auth.group --indent 2 > users/fixtures/groups.json` - Сохранение групп в json-файл.
+    - `python manage.py loaddata core/fixtures/default_groups.json` - Загрузка групп из json-файл в БД.
+
+`
 
 
 ## Текущие маршруты
