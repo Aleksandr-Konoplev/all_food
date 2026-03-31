@@ -4,11 +4,11 @@
 
 ## Что есть в проекте
 
-- `core` - главная страница, страница "О ресторане", тестовая страница, редактируемый контент сайта и панель управления
-- `users` - кастомная модель пользователя с авторизацией по email, с подтверждением почты
-- `table_reservation` - CRUD для бронирований, контроль пересечений по времени и привязка депозита к столику
-- права доступа через обычного пользователя, модератора и суперпользователя
-- отправка email через две SMTP-конфигурации: `main` и `auto`
+- `core` - главная страница, страница "О ресторане", обратная связь, контент сайта, панель управления
+- `users` - кастомная модель пользователя, авторизация по email, регистрация и подтверждение почты
+- `table_reservation` - столики и CRUD бронирований с проверкой пересечений по времени
+- роли: пользователь, модератор, суперпользователь
+- email через две SMTP-конфигурации: `main` и `auto`
 
 ## Стек
 
@@ -18,26 +18,22 @@
 - Pillow
 - python-dotenv
 - psycopg2
+- black, isort, flake8
 
 Зависимости описаны в `pyproject.toml`.
 
-## Конфигурация проекта
+## Структура проекта
 
-Основные настройки находятся в `config/settings.py`.
+- `config` - настройки Django, маршруты, ASGI/WSGI
+- `core` - страницы сайта, блоки контента, обратная связь, management-команды
+- `users` - пользователи, регистрация, подтверждение email, профили
+- `table_reservation` - столики, бронирования, проверка доступности
+- `static` - статика проекта
+- `media` - загружаемые файлы
 
-- база данных - PostgreSQL
-- кастомная модель пользователя - `users.User`
-- `LOGIN_URL` - `users:login`
-- `LOGIN_REDIRECT_URL` - `core:home`
-- `LOGOUT_REDIRECT_URL` - `core:home`
-- язык - `en-us`
-- часовой пояс - `UTC`
-- статика - `static/`
-- медиа - `media/`
+## Переменные окружения
 
-### Переменные окружения
-
-Проект использует файл `.env` и ожидает следующие переменные:
+Проект использует `.env` и ожидает:
 
 ```env
 SECRET_KEY=
@@ -71,95 +67,87 @@ python -m venv .venv
 pip install -U pip
 pip install -e .
 python manage.py migrate
+python manage.py loaddata core/fixtures/default_content_for_site.json
+python manage.py loaddata core/fixtures/default_groups.json
+python manage.py loaddata core/fixtures/default_table.json
+python manage.py custom_csu
 python manage.py runserver
 ```
 
-Если нужен суперпользователь для кастомной модели, используйте:
+## Основные сущности
+
+- `users.User` - пользователь с логином по `email`, без `username`
+- `core.ContentForSite` - редактируемые блоки текста и изображений
+- `core.Feedback` - сообщения из формы обратной связи
+- `table_reservation.Table` - столик, количество мест, описание, минимальный депозит
+- `table_reservation.Reservation` - бронирование столика на интервал времени
+
+## Особенности логики
+
+- новый пользователь создается неактивным и активируется по ссылке из email
+- для модератора используется группа `moderator`
+- депозит бронирования автоматически берется из `Table.min_deposit`
+- нельзя создать пересекающиеся бронирования для одного столика
+- на странице бронирования показывается занятость столов по выбранному дню
+
+## Фикстуры
+
+В проекте есть стартовые фикстуры:
+
+- `core/fixtures/default_content_for_site.json`
+- `core/fixtures/default_groups.json`
+- `core/fixtures/default_table.json`
+
+Загрузка:
 
 ```bash
-python manage.py custom_csu
+python manage.py loaddata core/fixtures/default_content_for_site.json
+python manage.py loaddata core/fixtures/default_groups.json
+python manage.py loaddata core/fixtures/default_table.json
 ```
 
-## Сущности
+Если фикстура лежит в папке `fixtures`, можно использовать короткий вариант, например:
 
-### Пользователь
+```bash
+python manage.py loaddata default_groups
+```
 
-- логин по `email`
-- `username` отключен
-- поддерживаются `avatar`, `phone_number`, `tg_chat_id`
-- после регистрации пользователь создается неактивным и активируется через ссылку из email
+## Management-команды
 
-### Столик
+- `python manage.py custom_csu` - создать суперпользователя для кастомной модели
+- `python manage.py dumpfixture core.ContentForSite core/fixtures/content_for_site.json` - выгрузить данные модели в JSON
+- `python manage.py dumpfixture table_reservation.Table core/fixtures/tables.json` - выгрузить столики в JSON
+- `python manage.py dumpdata auth.group --indent 2 > core/fixtures/groups.json` - выгрузить группы
+- `python manage.py loaddata core/fixtures/groups.json` - загрузить группы
+- `python manage.py full_reset_db` - полностью очистить PostgreSQL БД
 
-- номер столика
-- количество мест
-- описание
-- минимальный депозит
+## Маршруты
 
-### Бронирование
+- `/` - главная страница
+- `/about/` - страница о ресторане
+- `/control-panel/` - панель управления модератора
+- `/content/` - список блоков контента
+- `/content/<int:pk>/update/` - редактирование блока контента
+- `/feedbacks/` - список сообщений обратной связи
+- `/users/login/`, `/users/logout/`, `/users/register/`
+- `/users/email-confirm/<str:token>/` - подтверждение email
+- `/users/list/` - список пользователей
+- `/reserve/create/`, `/reserve/list/`
+- `/reserve/<int:pk>/detail/`, `/reserve/<int:pk>/update/`, `/reserve/<int:pk>/delete/`
 
-- владелец бронирования
-- время начала и окончания
-- выбранный столик
-- депозит, который автоматически синхронизируется с `min_deposit` столика
-- валидация пересечений по времени для одного столика
+## Code Style
 
-## Роли и доступы
+```bash
+black .
+isort .
+flake8 .
+```
 
-- обычный пользователь видит и редактирует только свои профиль и бронирования
-- модератор и суперпользователь получают расширенный доступ к спискам и объектам
-- `ControlPanelView` и список пользователей доступны только модератору или суперпользователю
+## Что важно учесть
 
-Для модератора используется группа `moderator`.
-
-## Полезные management-команды
-
-- **Пользователь**
-  - `python manage.py custom_csu` - Создание суперпользователя.
-- **База данных**
-  - *Сброс и восстановление схем*
-    - `python manage.py full_reset_db` - **ВНИМАНИЕ!** Полная очистка базы данных. Перед выполнением убедитесь что вы
-    сделали выгрузку данных (если они нужны) 
-    - `python manage.py migrate` - Применить миграции
-  - *Контент*
-    - `python manage.py dumpfixture core.ContentForSite core/fixtures/content_for_site.json` - 
-    Сохранение блоков контента в json-файл из БД. 
-    - `python manage.py loaddata core/fixtures/default_content_for_site.json` - Загрузка блоков контента для наполнения 
-    сайта в базу данных (измените имя json-файла для загрузки ранее сохранённой схемы столов)
-
-  - *Столы*
-    - `python manage.py dumpfixture table_reservation.Table core/fixtures/tables.json` - 
-    Сохранение столов в json-файл из БД.
-    - `python manage.py loaddata core/fixtures/default_tables.json` - Загрузка схемы столов в базу данных (измените имя
-    json-файла для загрузки ранее сохранённой схемы столов)
-
-
-## Текущие маршруты
-
-| URL | Контроллер / view | Назначение |
-| --- | --- | --- |
-| `/` | `HomePageView` | Главная страница сайта |
-| `admin/` | `admin.site.urls` | Вход в административную панель Django |
-| `about/` | `AboutPageView` | Страница с информацией о ресторане |
-| `control-panel/` | `ControlPanelView` | Панель управления для модератора |
-| `content/<int:pk>/update/` | `ContentUpdateView` | Редактирование контентного блока сайта |
-| `test-page/` | `TestPageView` | Тестовая страница со ссылками на основные сущности |
-| `users/login/` | `LoginView` | Авторизация пользователя |
-| `users/logout/` | `LogoutView` | Выход пользователя из системы |
-| `users/register/` | `UserCreateView` | Регистрация нового пользователя |
-| `users/email-confirm/<str:token>/` | `email_verification` | Подтверждение email и активация аккаунта |
-| `users/list/` | `UserListView` | Просмотр списка пользователей |
-| `users/user/<int:pk>/detail/` | `UserDetailView` | Просмотр детальной информации о пользователе |
-| `users/user/<int:pk>/update/` | `UserUpdateView` | Редактирование данных пользователя |
-| `users/user/<int:pk>/delete/` | `UserDeleteView` | Удаление пользователя |
-| `reserve/create/` | `ReservationCreateView` | Создание бронирования столика |
-| `reserve/list/` | `ReservationListView` | Просмотр списка бронирований |
-| `reserve/<int:pk>/detail/` | `ReservationDetailView` | Просмотр деталей бронирования |
-| `reserve/<int:pk>/update/` | `ReservationUpdateView` | Редактирование бронирования |
-| `reserve/<int:pk>/delete/` | `ReservationDeleteView` | Удаление бронирования |
-
-## Что еще стоит учитывать
-
-- тесты в приложениях пока не реализованы
-- `DEBUG` сейчас включен
-- `ALLOWED_HOSTS` пока пустой и требует настройки для deployment
+- проект настроен на PostgreSQL
+- `AUTH_USER_MODEL` - `users.User`
+- `DEBUG = True`
+- `ALLOWED_HOSTS = []`
+- `test-page/` используется для локальной проверки и не нужен в production
+- тесты в приложениях пока почти не реализованы
