@@ -23,16 +23,54 @@
 
                         </div>
                         <div class="col-lg-6">
-                            <div class="card border-0 rounded-4 overflow-hidden shadow h-100 text-white"
-                                 {% if promo_1 and promo_1.image %}style="background-image: linear-gradient(rgba(0, 0, 0, 0.35), rgba(0, 0, 0, 0.65)), url('{{ promo_1.image.url }}'); background-size: cover; background-position: center; min-height: 22rem;"{% else %}style="background: linear-gradient(180deg, rgba(33, 37, 41, 0.9), rgba(33, 37, 41, 0.65)); min-height: 22rem;"{% endif %}>
-                                <div class="card-body p-4 p-lg-5 d-flex flex-column h-100">
-                                    <h2 class="h4 mb-3 text-start">Акции</h2>
-
-                                    <div class="mt-5 mt-lg-auto bg-dark bg-opacity-50 rounded-4 p-3 p-lg-4">
-                                        <h3 class="h5 mb-2">{{ promo_1.title|default:'Специальное предложение' }}</h3>
-                                        <p class="mb-0">{{ promo_1.text|default:'Добавьте запись ContentForSite с тегом promo_1, чтобы показать текст акции.' }}</p>
+                            <div id="promoCarousel" class="carousel slide h-100" data-bs-ride="carousel" data-bs-interval="5000">
+                                {% if promo_items|length > 1 %}
+                                    <div class="carousel-indicators mb-3">
+                                        {% for promo in promo_items %}
+                                            <button type="button" data-bs-target="#promoCarousel" data-bs-slide-to="{{ forloop.counter0 }}"{% if forloop.first %} class="active" aria-current="true"{% endif %} aria-label="Slide {{ forloop.counter }}"></button>
+                                        {% endfor %}
                                     </div>
+                                {% endif %}
+                                <div class="carousel-inner h-100 rounded-4 shadow">
+                                    {% for promo in promo_items %}
+                                        <div class="carousel-item h-100{% if forloop.first %} active{% endif %}">
+                                            <div class="card border-0 rounded-4 overflow-hidden h-100 text-white"
+                                                 {% if promo.image %}style="background-image: linear-gradient(rgba(0, 0, 0, 0.35), rgba(0, 0, 0, 0.65)), url('{{ promo.image.url }}'); background-size: cover; background-position: center; min-height: 22rem;"{% else %}style="background: linear-gradient(180deg, rgba(33, 37, 41, 0.9), rgba(33, 37, 41, 0.65)); min-height: 22rem;"{% endif %}>
+                                                <div class="card-body p-4 p-lg-5 d-flex flex-column h-100">
+                                                    <h2 class="h4 mb-3 text-start">Акции</h2>
+
+                                                    <div class="mt-5 mt-lg-auto bg-dark bg-opacity-50 rounded-4 p-3 p-lg-4">
+                                                        <h3 class="h5 mb-2">{{ promo.title|default:'Специальное предложение' }}</h3>
+                                                        <p class="mb-0">{{ promo.text|default:'Добавьте запись ContentForSite с тегом promo_1, чтобы показать текст акции.' }}</p>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    {% empty %}
+                                        <div class="carousel-item active h-100">
+                                            <div class="card border-0 rounded-4 overflow-hidden h-100 text-white" style="background: linear-gradient(180deg, rgba(33, 37, 41, 0.9), rgba(33, 37, 41, 0.65)); min-height: 22rem;">
+                                                <div class="card-body p-4 p-lg-5 d-flex flex-column h-100">
+                                                    <h2 class="h4 mb-3 text-start">Акции</h2>
+
+                                                    <div class="mt-5 mt-lg-auto bg-dark bg-opacity-50 rounded-4 p-3 p-lg-4">
+                                                        <h3 class="h5 mb-2">Специальное предложение</h3>
+                                                        <p class="mb-0">Добавьте записи ContentForSite с тегами promo_1 и promo_2, чтобы запустить карусель акций.</p>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    {% endfor %}
                                 </div>
+                                {% if promo_items|length > 1 %}
+                                    <button class="carousel-control-prev" type="button" data-bs-target="#promoCarousel" data-bs-slide="prev">
+                                        <span class="carousel-control-prev-icon" aria-hidden="true"></span>
+                                        <span class="visually-hidden">Previous</span>
+                                    </button>
+                                    <button class="carousel-control-next" type="button" data-bs-target="#promoCarousel" data-bs-slide="next">
+                                        <span class="carousel-control-next-icon" aria-hidden="true"></span>
+                                        <span class="visually-hidden">Next</span>
+                                    </button>
+                                {% endif %}
                             </div>
                         </div>
                     </div>
@@ -45,7 +83,7 @@
         </div>
     </main>
 
-    <script src="{% static 'js/bootstrap.bundle.min.js' %}" integrity="sha384-YvpcrYf0tY3lHB60NNkmXc5s9fDVZLESaAA55NDzOxhy9GkcIdslK1eN7N6jIeHz" crossorigin="anonymous"></script>
+    <script src="{% static 'js/bootstrap.bundle.min.js' %}"></script>
     {% block extra_js %}{% endblock %}
     <link rel="stylesheet" href="{% static 'css/flatpickr.min.css' %}">
     <script src="{% static 'js/flatpickr.js' %}"></script>
