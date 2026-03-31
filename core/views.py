@@ -1,4 +1,5 @@
 from django.urls import reverse, reverse_lazy
+from django.utils import timezone
 from django.views.generic import TemplateView, ListView, DetailView, DeleteView
 from django.views.generic.edit import UpdateView, FormMixin
 
@@ -67,12 +68,13 @@ class ControlPanelView(ModeratorRequiredMixin, AddBaseContentMixin, TemplateView
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
         count_feedback = Feedback.objects.count()
+        active_reservations_count = Reservation.objects.filter(end_at__gt=timezone.now()).count()
 
         context['stats_cards'] = [
             {'title': 'Сообщения клиентов', 'value': count_feedback, 'description': 'Сообщения от клиентов присланные через форму.'},
             {'title': 'Пользователей', 'value': User.objects.count(), 'description': 'Все зарегистрированные аккаунты.'},
             {'title': 'Столиков', 'value': Table.objects.count(), 'description': 'Доступные столики для бронирования.'},
-            {'title': 'Бронирований', 'value': Reservation.objects.count(), 'description': 'Все созданные бронирования.'},
+            {'title': 'Бронирований', 'value': active_reservations_count, 'description': 'Бронирования, у которых время окончания еще не наступило.'},
         ]
         context['quick_links'] = [
             {'label': 'Админка Django', 'href': '/admin/'},
