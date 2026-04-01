@@ -37,9 +37,7 @@ class Migration(migrations.Migration):
                 ),
                 (
                     "num_of_seats",
-                    models.PositiveIntegerField(
-                        verbose_name="Максимальное количество посадочных мест"
-                    ),
+                    models.PositiveIntegerField(verbose_name="Максимальное количество посадочных мест"),
                 ),
                 (
                     "description",
@@ -67,9 +65,7 @@ class Migration(migrations.Migration):
                 ("time_visit", models.TimeField(verbose_name="Время визита")),
                 (
                     "duration_visit",
-                    models.PositiveIntegerField(
-                        default=120, verbose_name="Длительность (в минутах)"
-                    ),
+                    models.PositiveIntegerField(default=120, verbose_name="Длительность (в минутах)"),
                 ),
                 (
                     "deposit",

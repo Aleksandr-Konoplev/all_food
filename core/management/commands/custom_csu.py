@@ -6,21 +6,21 @@ from users.models import User
 
 
 class Command(BaseCommand):
-    help = 'Создаёт суперпользователя под кастомную модель пользователя'
+    help = "Создаёт суперпользователя под кастомную модель пользователя"
 
     def handle(self, *args, **options):
-        email = input('Введите email: ')
-        self.stdout.write(f'Создание суперпользователя с email {email}')
+        email = input("Введите email: ")
+        self.stdout.write(f"Создание суперпользователя с email {email}")
 
         # Проверяем, если пользователь существует - удаляем его
         User.objects.filter(email=email).delete()
 
         # Запрашиваем пароль
         while True:
-            password = getpass('Пароль: ')
-            password2 = getpass('Пароль (ещё раз): ')
+            password = getpass("Пароль: ")
+            password2 = getpass("Пароль (ещё раз): ")
             if password != password2:
-                self.stdout.write('Пароли не совпадают. Попробуйте снова.')
+                self.stdout.write("Пароли не совпадают. Попробуйте снова.")
                 continue
             break
 
@@ -29,4 +29,4 @@ class Command(BaseCommand):
         user.set_password(password)
         user.save()
 
-        self.stdout.write(self.style.SUCCESS(f'Суперпользователь {email} успешно создан!'))
+        self.stdout.write(self.style.SUCCESS(f"Суперпользователь {email} успешно создан!"))

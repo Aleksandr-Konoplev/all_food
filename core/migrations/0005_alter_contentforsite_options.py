@@ -15,9 +15,8 @@ class Migration(migrations.Migration):
             options={"verbose_name": "Блок контента для сайта", "verbose_name_plural": "Блоки контента для вставки"},
         ),
         migrations.RenameField(
-            model_name='contentforsite',
-            old_name='name_content',
-            new_name='name_tag',
+            model_name="contentforsite",
+            old_name="name_content",
+            new_name="name_tag",
         ),
-
     ]

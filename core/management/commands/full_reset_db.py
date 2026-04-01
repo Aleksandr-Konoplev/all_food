@@ -18,7 +18,7 @@ class Command(BaseCommand):
             self.stdout.write(self.style.WARNING("No tables found"))
             return
 
-        tables_sql = ', '.join(f'"{t}"' for t in tables)
+        tables_sql = ", ".join(f'"{t}"' for t in tables)
 
         with connection.cursor() as cursor:
             cursor.execute(f"""
