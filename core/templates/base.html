@@ -14,7 +14,8 @@
 
     <main class="page-shell">
         <div class="container py-4 py-lg-5">
-            <section class="card hero-card shadow-lg rounded-4 mb-4 mb-lg-5">
+            <section class="card hero-card shadow-lg rounded-4 mb-4 mb-lg-5"
+                {% if main_img and main_img.image %}style="background-size: contain; background-image: linear-gradient(to left, rgba(247, 241, 232, 0.82) 0%, rgba(247, 241, 232, 0.58) 16%, rgba(247, 241, 232, 0.16) 32%, rgba(247, 241, 232, 0.03) 48%, rgba(247, 241, 232, 0) 60%), url('{{ main_img.image.url }}');"{% endif %}>
                 <div class="card-body p-4 p-lg-5">
                     <div class="row align-items-start g-4">
                         <div class="col-lg-6 d-flex flex-column justify-content-start">
