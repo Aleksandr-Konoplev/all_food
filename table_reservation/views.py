@@ -18,12 +18,12 @@ class ReservationCreateView(AddBaseContentMixin, LoginRequiredMixin, CreateView)
 
     model = Reservation
     form_class = ReservationForm
-    template_name = 'table_reservation/reservation_form.html'  # noqa
-    success_url = reverse_lazy('table_reservation:reservation-list')
+    template_name = "table_reservation/reservation_form.html"  # noqa
+    success_url = reverse_lazy("table_reservation:reservation-list")
 
     @staticmethod
     def _get_selected_day(day_value: str | None):
-        """ Возвращает выбранную дату из query params или сегодняшнюю дату. """
+        """Возвращает выбранную дату из query params или сегодняшнюю дату."""
         if day_value:
             selected_day = parse_date(day_value)
             if selected_day:
@@ -40,14 +40,18 @@ class ReservationCreateView(AddBaseContentMixin, LoginRequiredMixin, CreateView)
         context = super().get_context_data(**kwargs)
 
         # День для фильтрации приходит через GET-параметр day (YYYY-MM-DD).
-        selected_day = self._get_selected_day(self.request.GET.get('day'))
+        selected_day = self._get_selected_day(self.request.GET.get("day"))
 
-        tables = Table.objects.order_by('num_table')
+        tables = Table.objects.order_by("num_table")
 
         # Получаем брони, у которых дата начала (start_at) совпадает с выбранным днем.
-        reservations = Reservation.objects.filter(
-            start_at__date=selected_day,
-        ).select_related('table').order_by('table__num_table', 'start_at')
+        reservations = (
+            Reservation.objects.filter(
+                start_at__date=selected_day,
+            )
+            .select_related("table")
+            .order_by("table__num_table", "start_at")
+        )
 
         # Группируем брони по ID стола для быстрого доступа в цикле вывода.
         reservations_by_table = {}
@@ -66,58 +70,56 @@ class ReservationCreateView(AddBaseContentMixin, LoginRequiredMixin, CreateView)
                     f'{timezone.localtime(reservation.end_at).strftime("%H:%M")}'
                 )
 
-            busy_time = ', '.join(intervals) if intervals else 'нет бронирований'
-            tables_busy_lines.append(
-                f'Стол {table.num_table}, занятое время: {busy_time}'
-            )
+            busy_time = ", ".join(intervals) if intervals else "нет бронирований"
+            tables_busy_lines.append(f"Стол {table.num_table}, занятое время: {busy_time}")
 
-        context['selected_day'] = selected_day.isoformat()
-        context['tables_busy_lines'] = tables_busy_lines
+        context["selected_day"] = selected_day.isoformat()
+        context["tables_busy_lines"] = tables_busy_lines
 
         # Передаем в шаблон карту депозитов для мгновенного обновления отображаемой суммы.
-        form = context.get('form')
-        context['table_deposits'] = getattr(form, 'table_deposits', {}) if form else {}
+        form = context.get("form")
+        context["table_deposits"] = getattr(form, "table_deposits", {}) if form else {}
         return context
 
     def form_valid(self, form):
-        """ Добавляем владельца и сохраняем депозит строго из минимального депозита столика. """
+        """Добавляем владельца и сохраняем депозит строго из минимального депозита столика."""
         form.instance.owner = self.request.user
-        form.instance.deposit = form.cleaned_data['table'].min_deposit
+        form.instance.deposit = form.cleaned_data["table"].min_deposit
         return super().form_valid(form)
 
 
 class ReservationListView(AddBaseContentMixin, LoginRequiredMixin, OwnerOrModerReservationQuerysetMixin, ListView):
     model = Reservation
-    template_name = 'table_reservation/reservations_list.html'  # type: ignore
-    context_object_name = 'reservations'
+    template_name = "table_reservation/reservations_list.html"  # type: ignore
+    context_object_name = "reservations"
 
 
 class ReservationDetailView(AddBaseContentMixin, LoginRequiredMixin, OwnerOrModerReservationQuerysetMixin, DetailView):
     model = Reservation
-    template_name = 'table_reservation/reservation_detail.html'  # type: ignore
-    context_object_name = 'reservation'
+    template_name = "table_reservation/reservation_detail.html"  # type: ignore
+    context_object_name = "reservation"
 
 
 class ReservationUpdateView(AddBaseContentMixin, LoginRequiredMixin, OwnerOrModerReservationQuerysetMixin, UpdateView):
     model = Reservation
     form_class = ReservationForm
-    template_name = 'table_reservation/reservation_form.html'  # type: ignore
-    success_url = reverse_lazy('table_reservation:reservation-list')
+    template_name = "table_reservation/reservation_form.html"  # type: ignore
+    success_url = reverse_lazy("table_reservation:reservation-list")
 
     def get_context_data(self, **kwargs):
-        """ Передаем карту депозитов и при редактировании брони. """
+        """Передаем карту депозитов и при редактировании брони."""
         context = super().get_context_data(**kwargs)
-        form = context.get('form')
-        context['table_deposits'] = getattr(form, 'table_deposits', {}) if form else {}
+        form = context.get("form")
+        context["table_deposits"] = getattr(form, "table_deposits", {}) if form else {}
         return context
 
     def form_valid(self, form):
-        """ При редактировании депозит также пересчитывается только по выбранному столику. """
-        form.instance.deposit = form.cleaned_data['table'].min_deposit
+        """При редактировании депозит также пересчитывается только по выбранному столику."""
+        form.instance.deposit = form.cleaned_data["table"].min_deposit
         return super().form_valid(form)
 
 
 class ReservationDeleteView(AddBaseContentMixin, LoginRequiredMixin, OwnerOrModerReservationQuerysetMixin, DeleteView):
     model = Reservation
-    template_name = 'table_reservation/confirm_delete.html'  # type: ignore
-    success_url = reverse_lazy('table_reservation:reservation-list')
+    template_name = "table_reservation/confirm_delete.html"  # type: ignore
+    success_url = reverse_lazy("table_reservation:reservation-list")
