@@ -1,12 +1,83 @@
 {% extends 'base.html' %}
 
-{% block title %}Форма пользователя{% endblock %}
+{% block title %}{% if object %}Редактирование профиля{% else %}Регистрация{% endif %}{% endblock %}
 
 {% block content %}
-<h1>{% if object %}Редактирование пользователя{% else %}Регистрация пользователя{% endif %}</h1>
-<form method="post" enctype="multipart/form-data">
-    {% csrf_token %}
-    {{ form.as_p }}
-    <button type="submit">Сохранить</button>
-</form>
+<section class="auth-section">
+    <div class="row g-4 align-items-stretch">
+        <div class="col-lg-5">
+            <div class="auth-aside h-100">
+                <span class="auth-eyebrow">{% if object %}Профиль гостя{% else %}Новый аккаунт{% endif %}</span>
+                <h1 class="auth-title mb-3">{% if object %}Обновите данные профиля{% else %}Присоединяйтесь к атмосфере All Food{% endif %}</h1>
+                <p class="auth-lead mb-4">{% if object %}Поддерживайте актуальные контакты, чтобы быстрее подтверждать брони и получать важные уведомления.{% else %}После регистрации вы сможете бронировать столики быстрее, отслеживать визиты и получать подтверждения на email.{% endif %}</p>
+                <div class="auth-note-list">
+                    <div class="auth-note-item">
+                        <strong>Бронирование без звонков</strong>
+                        <span>Личный кабинет сохраняет контакты и ускоряет оформление визита.</span>
+                    </div>
+                    <div class="auth-note-item">
+                        <strong>{% if object %}Всегда на связи{% else %}Подтверждение аккаунта{% endif %}</strong>
+                        <span>{% if object %}Актуальный email и телефон помогут не пропустить изменения по брони.{% else %}После регистрации мы отправим письмо для активации учетной записи.{% endif %}</span>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="col-lg-7">
+            <div class="card rounded-4 auth-panel border-0 h-100">
+                <div class="card-body p-4 p-lg-5">
+                    <div class="d-flex flex-column flex-sm-row justify-content-between align-items-sm-start gap-3 mb-4">
+                        <div>
+                            <span class="text-uppercase small fw-semibold auth-kicker">{% if object %}Редактирование{% else %}Регистрация{% endif %}</span>
+                            <h2 class="h3 mb-1">{% if object %}Профиль пользователя{% else %}Создание аккаунта{% endif %}</h2>
+                            <p class="text-body-secondary mb-0">{% if object %}Изменения сохранятся сразу в вашем профиле.{% else %}Заполните поля, чтобы открыть доступ к личному кабинету.{% endif %}</p>
+                        </div>
+                        {% if object %}
+                            <a class="btn btn-outline-dark auth-ghost-btn" href="{% url 'users:user-detail' object.pk %}">К профилю</a>
+                        {% else %}
+                            <a class="btn btn-outline-dark auth-ghost-btn" href="{% url 'users:login' %}">Уже есть аккаунт</a>
+                        {% endif %}
+                    </div>
+
+                    <form method="post" enctype="multipart/form-data" novalidate>
+                        {% csrf_token %}
+
+                        {% if form.non_field_errors %}
+                            <div class="alert alert-danger rounded-4 mb-4">
+                                {% for error in form.non_field_errors %}
+                                    <div>{{ error }}</div>
+                                {% endfor %}
+                            </div>
+                        {% endif %}
+
+                        <div class="row g-3">
+                            {% for hidden in form.hidden_fields %}
+                                {{ hidden }}
+                            {% endfor %}
+                            {% for field in form.visible_fields %}
+                                <div class="{% if field.name == 'avatar' or field.name == 'password1' or field.name == 'password2' %}col-12{% else %}col-md-6{% endif %}">
+                                    <label class="form-label auth-label" for="{{ field.id_for_label }}">{{ field.label }}</label>
+                                    {{ field }}
+                                    {% if field.help_text %}
+                                        <div class="form-text auth-help">{{ field.help_text }}</div>
+                                    {% endif %}
+                                    {% for error in field.errors %}
+                                        <div class="text-danger small mt-1">{{ error }}</div>
+                                    {% endfor %}
+                                </div>
+                            {% endfor %}
+                            <div class="col-12 d-grid d-sm-flex gap-3 align-items-sm-center pt-2">
+                                <button type="submit" class="btn btn-dark auth-submit-btn">{% if object %}Сохранить изменения{% else %}Создать аккаунт{% endif %}</button>
+                                {% if object %}
+                                    <span class="text-body-secondary small">Изменения сразу появятся в вашем профиле.</span>
+                                {% else %}
+                                    <span class="text-body-secondary small">После регистрации останется подтвердить email из письма.</span>
+                                {% endif %}
+                            </div>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
 {% endblock %}

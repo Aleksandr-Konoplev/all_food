@@ -1,12 +1,14 @@
 import secrets
 
+from django.contrib.auth.views import LogoutView, LoginView
+
 from core.services import custom_send_email
 from django.urls import reverse, reverse_lazy
 
 from django.views.generic import DetailView, ListView
 from django.views.generic.edit import CreateView, DeleteView, UpdateView
 
-from users.forms import UserRegisterForm, UserUpdateForm
+from users.forms import UserLoginForm, UserRegisterForm, UserUpdateForm
 from users.mixins import UserAccessQuerysetMixin, ModeratorRequiredMixin
 from users.models import User
 from core.mixins import AddBaseContentMixin
@@ -56,4 +58,14 @@ class UserUpdateView(AddBaseContentMixin, UserAccessQuerysetMixin, UpdateView):
 class UserDeleteView(AddBaseContentMixin, UserAccessQuerysetMixin, DeleteView):
     model = User
     template_name = 'users/confirm_delete.html'  # type: ignore
+    success_url = reverse_lazy('users:login')
+
+
+class UserLoginView(AddBaseContentMixin, LoginView):
+    form_class = UserLoginForm
+    template_name = 'users/login.html'  # type: ignore
+    success_url = reverse_lazy('core:home')
+
+
+class UserLogoutView(AddBaseContentMixin, LogoutView):
     success_url = reverse_lazy('users:login')

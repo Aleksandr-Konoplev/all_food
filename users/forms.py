@@ -1,6 +1,24 @@
-from django.contrib.auth.forms import UserCreationForm
+from django.contrib.auth.forms import AuthenticationForm, UserCreationForm
 from django.forms import ModelForm
 from users.models import User
+
+
+class UserLoginForm(AuthenticationForm):
+    def __init__(self, *args, **kwargs):
+        super().__init__(*args, **kwargs)
+
+        self.fields['username'].label = 'Email'
+        self.fields['username'].help_text = 'Используйте email, указанный при регистрации'
+        self.fields['username'].widget.attrs.update({
+            'class': 'form-control auth-input',
+            'placeholder': 'example@mail.ru',
+            'autocomplete': 'email',
+        })
+        self.fields['password'].widget.attrs.update({
+            'class': 'form-control auth-input',
+            'placeholder': 'Введите пароль',
+            'autocomplete': 'current-password',
+        })
 
 
 class UserRegisterForm(UserCreationForm):
@@ -36,6 +54,38 @@ class UserRegisterForm(UserCreationForm):
         self.fields['first_name'].help_text = 'Введите ваше имя'
         self.fields['last_name'].help_text = 'Введите вашу фамилию'
 
+        self.fields['email'].widget.attrs.update({
+            'class': 'form-control auth-input',
+            'placeholder': 'example@mail.ru',
+            'autocomplete': 'email',
+        })
+        self.fields['password1'].widget.attrs.update({
+            'class': 'form-control auth-input',
+            'placeholder': 'Придумайте пароль',
+            'autocomplete': 'new-password',
+        })
+        self.fields['password2'].widget.attrs.update({
+            'class': 'form-control auth-input',
+            'placeholder': 'Повторите пароль',
+            'autocomplete': 'new-password',
+        })
+        self.fields['avatar'].widget.attrs.update({'class': 'form-control auth-input'})
+        self.fields['phone_number'].widget.attrs.update({
+            'class': 'form-control auth-input',
+            'placeholder': '+7 (900) 000-00-00',
+            'autocomplete': 'tel',
+        })
+        self.fields['first_name'].widget.attrs.update({
+            'class': 'form-control auth-input',
+            'placeholder': 'Ваше имя',
+            'autocomplete': 'given-name',
+        })
+        self.fields['last_name'].widget.attrs.update({
+            'class': 'form-control auth-input',
+            'placeholder': 'Ваша фамилия',
+            'autocomplete': 'family-name',
+        })
+
 
 class UserUpdateForm(ModelForm):
     class Meta:
@@ -62,3 +112,25 @@ class UserUpdateForm(ModelForm):
         self.fields['phone_number'].help_text = 'Введите номер телефона в формате +7 ХХХ ХХ ХХ'
         self.fields['first_name'].help_text = 'Введите ваше имя'
         self.fields['last_name'].help_text = 'Введите вашу фамилию'
+
+        self.fields['email'].widget.attrs.update({
+            'class': 'form-control auth-input',
+            'placeholder': 'example@mail.ru',
+            'autocomplete': 'email',
+        })
+        self.fields['avatar'].widget.attrs.update({'class': 'form-control auth-input'})
+        self.fields['phone_number'].widget.attrs.update({
+            'class': 'form-control auth-input',
+            'placeholder': '+7 (900) 000-00-00',
+            'autocomplete': 'tel',
+        })
+        self.fields['first_name'].widget.attrs.update({
+            'class': 'form-control auth-input',
+            'placeholder': 'Ваше имя',
+            'autocomplete': 'given-name',
+        })
+        self.fields['last_name'].widget.attrs.update({
+            'class': 'form-control auth-input',
+            'placeholder': 'Ваша фамилия',
+            'autocomplete': 'family-name',
+        })
