@@ -3,10 +3,70 @@
 {% block title %}Вход{% endblock %}
 
 {% block content %}
-<h1>Вход</h1>
-<form method="post">
-    {% csrf_token %}
-    {{ form.as_p }}
-    <button type="submit">Войти</button>
-</form>
+<section class="auth-section">
+    <div class="row g-4 align-items-stretch">
+        <div class="col-lg-5">
+            <div class="auth-aside h-100">
+                <span class="auth-eyebrow">All Food</span>
+                <h1 class="auth-title mb-3">С возвращением</h1>
+                <p class="auth-lead mb-4">Войдите в личный кабинет, чтобы управлять бронированиями, быстрее отправлять запросы и держать под рукой историю визитов.</p>
+                <div class="auth-note-list">
+                    <div class="auth-note-item">
+                        <strong>Быстрый доступ</strong>
+                        <span>Смотрите свои брони и обновляйте профиль в пару кликов.</span>
+                    </div>
+                    <div class="auth-note-item">
+                        <strong>Уютный сервис</strong>
+                        <span>Вся коммуникация с рестораном собрана в одном месте.</span>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="col-lg-7">
+            <div class="card rounded-4 auth-panel border-0 h-100">
+                <div class="card-body p-4 p-lg-5">
+                    <div class="d-flex flex-column flex-sm-row justify-content-between align-items-sm-start gap-3 mb-4">
+                        <div>
+                            <span class="text-uppercase small fw-semibold auth-kicker">Вход в аккаунт</span>
+                            <h2 class="h3 mb-1">Личный кабинет гостя</h2>
+                            <p class="text-body-secondary mb-0">Используйте email и пароль от аккаунта.</p>
+                        </div>
+                        <a class="btn btn-outline-dark auth-ghost-btn" href="{% url 'users:register' %}">Регистрация</a>
+                    </div>
+
+                    <form method="post" novalidate>
+                        {% csrf_token %}
+
+                        {% if form.non_field_errors %}
+                            <div class="alert alert-danger rounded-4 mb-4">
+                                {% for error in form.non_field_errors %}
+                                    <div>{{ error }}</div>
+                                {% endfor %}
+                            </div>
+                        {% endif %}
+
+                        <div class="row g-3">
+                            {% for field in form %}
+                                <div class="col-12">
+                                    <label class="form-label auth-label" for="{{ field.id_for_label }}">{{ field.label }}</label>
+                                    {{ field }}
+                                    {% if field.help_text %}
+                                        <div class="form-text auth-help">{{ field.help_text }}</div>
+                                    {% endif %}
+                                    {% for error in field.errors %}
+                                        <div class="text-danger small mt-1">{{ error }}</div>
+                                    {% endfor %}
+                                </div>
+                            {% endfor %}
+                            <div class="col-12 d-grid d-sm-flex gap-3 align-items-sm-center pt-2">
+                                <button type="submit" class="btn btn-dark auth-submit-btn">Войти</button>
+                                <span class="text-body-secondary small">Нет аккаунта? <a class="auth-link" href="{% url 'users:register' %}">Создайте его</a></span>
+                            </div>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
 {% endblock %}

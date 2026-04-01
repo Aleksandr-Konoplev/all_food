@@ -8,7 +8,7 @@ from django.urls import reverse, reverse_lazy
 from django.views.generic import DetailView, ListView
 from django.views.generic.edit import CreateView, DeleteView, UpdateView
 
-from users.forms import UserRegisterForm, UserUpdateForm
+from users.forms import UserLoginForm, UserRegisterForm, UserUpdateForm
 from users.mixins import UserAccessQuerysetMixin, ModeratorRequiredMixin
 from users.models import User
 from core.mixins import AddBaseContentMixin
@@ -62,6 +62,7 @@ class UserDeleteView(AddBaseContentMixin, UserAccessQuerysetMixin, DeleteView):
 
 
 class UserLoginView(AddBaseContentMixin, LoginView):
+    form_class = UserLoginForm
     template_name = 'users/login.html'  # type: ignore
     success_url = reverse_lazy('core:home')
 
