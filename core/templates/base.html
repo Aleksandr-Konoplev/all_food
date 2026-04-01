@@ -16,9 +16,8 @@
         <div class="container py-4 py-lg-5">
             <section class="card hero-card shadow-lg rounded-4 mb-4 mb-lg-5">
                 <div class="card-body p-4 p-lg-5">
-                    <div class="row align-items-center g-4">
-                        <div class="col-lg-6">
-                            <span class="badge rounded-pill hero-badge px-3 py-2 mb-3">Бронирование столиков онлайн</span>
+                    <div class="row align-items-start g-4">
+                        <div class="col-lg-6 d-flex flex-column justify-content-start">
                             <h1 class="display-6 fw-semibold mb-3">{{ greeting.text|default:'Добро пожаловать в All Food' }}</h1>
 
                         </div>
@@ -35,7 +34,7 @@
                                     {% for promo in promo_items %}
                                         <div class="carousel-item h-100{% if forloop.first %} active{% endif %}">
                                             <div class="card border-0 rounded-4 overflow-hidden h-100 text-white"
-                                                 {% if promo.image %}style="background-image: linear-gradient(rgba(0, 0, 0, 0.35), rgba(0, 0, 0, 0.65)), url('{{ promo.image.url }}'); background-size: cover; background-position: center; min-height: 22rem;"{% else %}style="background: linear-gradient(180deg, rgba(33, 37, 41, 0.9), rgba(33, 37, 41, 0.65)); min-height: 22rem;"{% endif %}>
+                                                 {% if promo.image %}style="background-image: linear-gradient(rgba(0, 0, 0, 0.1), rgba(0, 0, 0, 0.35)), url('{{ promo.image.url }}'); background-size: cover; background-position: center; min-height: 22rem;"{% else %}style="background: linear-gradient(180deg, rgba(33, 37, 41, 0.9), rgba(33, 37, 41, 0.65)); min-height: 22rem;"{% endif %}>
                                                 <div class="card-body p-4 p-lg-5 d-flex flex-column h-100">
                                                     <h2 class="h4 mb-3 text-start">Акции</h2>
 

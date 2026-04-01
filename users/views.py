@@ -1,7 +1,7 @@
 import secrets
 
 from core.services import custom_send_email
-from django.urls import reverse_lazy
+from django.urls import reverse, reverse_lazy
 
 from django.views.generic import DetailView, ListView
 from django.views.generic.edit import CreateView, DeleteView, UpdateView
@@ -24,8 +24,9 @@ class UserCreateView(AddBaseContentMixin, CreateView):
         token = secrets.token_hex(16)
         user.token = token
         user.save()
-        host = self.request.get_host()
-        url = f"https://{host}/users/email-confirm/{token}"
+        url = self.request.build_absolute_uri(
+            reverse('users:email-confirm', kwargs={'token': token})
+        )
         custom_send_email('auto', 'Активация аккаунта', f'Перейдите по ссылке: {url} для регистрации аккаунта', [user.email])
 
         return super().form_valid(form)

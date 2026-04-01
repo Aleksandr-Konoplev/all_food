@@ -108,5 +108,25 @@
         "text": "Каждый день мы работаем вместе, чтобы еда, сервис и атмосфера оставались на одинаково высоком уровне.",
         "image": ""
     }
+},
+{
+    "model": "core.contentforsite",
+    "pk": 12,
+    "fields": {
+        "name_tag": "promo_1",
+        "title": "Бонус блюдо",
+        "text": "При покупке первого и второго блюда, салат в подарок.",
+        "image": "media/image_for_site/salat.jpg"
+    }
+},
+{
+    "model": "core.contentforsite",
+    "pk": 13,
+    "fields": {
+        "name_tag": "promo_2",
+        "title": "Всё лучшее детям",
+        "text": "При посещении заведения с ребёнком и заказа горячего блюда, десерт ребенку в подарок.",
+        "image": "media/image_for_site/child_kake.jpg"
+    }
 }
 ]
