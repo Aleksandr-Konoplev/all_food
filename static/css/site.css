@@ -4,10 +4,20 @@ body {
 }
 
 .hero-card {
-    background: linear-gradient(135deg, rgba(92, 47, 27, 0.92), rgba(166, 93, 56, 0.88));
+    background-image:
+        linear-gradient(to left, rgba(247, 241, 232, 0.82) 0%, rgba(247, 241, 232, 0.58) 16%, rgba(247, 241, 232, 0.16) 32%, rgba(247, 241, 232, 0.03) 48%, rgba(247, 241, 232, 0) 60%),
+        url('/static/img/main_img.png');
+    background-size: cover;
+    background-position: center;
     color: #fff8f1;
     border: 0;
     overflow: hidden;
+    position: relative;
+}
+
+.hero-card .card-body {
+    position: relative;
+    z-index: 1;
 }
 
 .hero-badge {

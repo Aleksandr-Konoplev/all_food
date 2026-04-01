@@ -128,5 +128,15 @@
         "text": "При посещении заведения с ребёнком и заказа горячего блюда, десерт ребенку в подарок.",
         "image": "media/image_for_site/child_kake.jpg"
     }
+},
+{
+    "model": "core.contentforsite",
+    "pk": 14,
+    "fields": {
+        "name_tag": "main_img",
+        "title": "",
+        "text": "",
+        "image": "media/image_for_site/main_img.png"
+    }
 }
 ]
