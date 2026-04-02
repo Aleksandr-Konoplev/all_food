@@ -96,7 +96,6 @@ class ControlPanelView(ModeratorRequiredMixin, AddBaseContentMixin, TemplateView
             {"label": "Админка Django", "href": "/admin/"},
             {"label": "Контент сайта", "url_name": "core:content-list"},
             {"label": "Сообщения обратной связи", "url_name": "core:feedbacks-list"},
-            {"label": "Тестовая страница", "url_name": "core:test-page"},
             {"label": "Список бронирований", "url_name": "table_reservation:reservation-list"},
             {"label": "Список пользователей", "url_name": "users:users-list"},
         ]
