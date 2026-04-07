@@ -14,6 +14,16 @@
 
     <main class="page-shell">
         <div class="container py-4 py-lg-5">
+            {% if messages %}
+                <section class="mb-4">
+                    {% for message in messages %}
+                        <div class="alert alert-{{ message.tags|default:'info' }} rounded-4 shadow-sm mb-2" role="alert">
+                            {{ message }}
+                        </div>
+                    {% endfor %}
+                </section>
+            {% endif %}
+
             <section class="card hero-card shadow-lg rounded-4 mb-4 mb-lg-5"
                 {% if main_img and main_img.image %}style="background-size: contain; background-image: linear-gradient(to left, rgba(247, 241, 232, 0.82) 0%, rgba(247, 241, 232, 0.58) 16%, rgba(247, 241, 232, 0.16) 32%, rgba(247, 241, 232, 0.03) 48%, rgba(247, 241, 232, 0) 60%), url('{{ main_img.image.url }}');"{% endif %}>
                 <div class="card-body p-4 p-lg-5">

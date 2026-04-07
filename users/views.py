@@ -1,16 +1,24 @@
-import secrets
-
+from django.contrib import messages
 from django.contrib.auth.views import LogoutView, LoginView
+from django.contrib.auth.views import PasswordResetCompleteView, PasswordResetConfirmView, PasswordResetDoneView, PasswordResetView
+from django.http import HttpResponseRedirect
 
-from core.services import custom_send_email
 from django.urls import reverse, reverse_lazy
 
-from django.views.generic import DetailView, ListView
+from django.views.generic import DetailView, FormView, ListView
 from django.views.generic.edit import CreateView, DeleteView, UpdateView
 
-from users.forms import UserLoginForm, UserRegisterForm, UserUpdateForm
+from users.forms import (
+    ResendConfirmationForm,
+    StyledPasswordResetForm,
+    StyledSetPasswordForm,
+    UserLoginForm,
+    UserRegisterForm,
+    UserUpdateForm,
+)
 from users.mixins import UserAccessQuerysetMixin, ModeratorRequiredMixin
 from users.models import User
+from users.services import resend_activation_email, send_activation_email
 from core.mixins import AddBaseContentMixin
 
 
@@ -23,15 +31,14 @@ class UserCreateView(AddBaseContentMixin, CreateView):
     def form_valid(self, form):
         user = form.save()
         user.is_active = False
-        token = secrets.token_hex(16)
-        user.token = token
-        user.save()
-        url = self.request.build_absolute_uri(
-            reverse('users:email-confirm', kwargs={'token': token})
+        user.save(update_fields=['is_active'])
+        send_activation_email(user, self.request, regenerate_token=True)
+        messages.success(
+            self.request,
+            'Аккаунт создан. Мы отправили письмо для подтверждения email. Если письмо потеряется, его можно отправить повторно.',
         )
-        custom_send_email('auto', 'Активация аккаунта', f'Перейдите по ссылке: {url} для регистрации аккаунта', [user.email])
-
-        return super().form_valid(form)
+        self.object = user
+        return HttpResponseRedirect(self.get_success_url())
 
 
 class UserListView(AddBaseContentMixin, ModeratorRequiredMixin, ListView):
@@ -69,3 +76,39 @@ class UserLoginView(AddBaseContentMixin, LoginView):
 
 class UserLogoutView(AddBaseContentMixin, LogoutView):
     success_url = reverse_lazy('users:login')
+
+
+class ResendConfirmationView(AddBaseContentMixin, FormView):
+    template_name = 'users/resend_confirmation.html'
+    form_class = ResendConfirmationForm
+    success_url = reverse_lazy('users:login')
+
+    def form_valid(self, form):
+        resend_activation_email(form.cleaned_data['email'], self.request)
+        messages.success(
+            self.request,
+            'Если для этого email требуется подтверждение, новое письмо уже отправлено.',
+        )
+        return super().form_valid(form)
+
+
+class UserPasswordResetView(AddBaseContentMixin, PasswordResetView):
+    template_name = 'users/password_reset_form.html'
+    form_class = StyledPasswordResetForm
+    email_template_name = 'users/password_reset_email.html'
+    subject_template_name = 'users/password_reset_subject.txt'
+    success_url = reverse_lazy('users:password-reset-done')
+
+
+class UserPasswordResetDoneView(AddBaseContentMixin, PasswordResetDoneView):
+    template_name = 'users/password_reset_done.html'
+
+
+class UserPasswordResetConfirmView(AddBaseContentMixin, PasswordResetConfirmView):
+    template_name = 'users/password_reset_confirm.html'
+    form_class = StyledSetPasswordForm
+    success_url = reverse_lazy('users:password-reset-complete')
+
+
+class UserPasswordResetCompleteView(AddBaseContentMixin, PasswordResetCompleteView):
+    template_name = 'users/password_reset_complete.html'

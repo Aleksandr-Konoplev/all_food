@@ -73,6 +73,11 @@
                                     <span class="text-body-secondary small">После регистрации останется подтвердить email из письма.</span>
                                 {% endif %}
                             </div>
+                            {% if not object %}
+                                <div class="col-12">
+                                    <a class="auth-link small" href="{% url 'users:resend-confirmation' %}">Не нашли письмо активации? Отправить повторно</a>
+                                </div>
+                            {% endif %}
                         </div>
                     </form>
                 </div>

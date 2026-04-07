@@ -62,6 +62,10 @@
                                 <button type="submit" class="btn btn-dark auth-submit-btn">Войти</button>
                                 <span class="text-body-secondary small">Нет аккаунта? <a class="auth-link" href="{% url 'users:register' %}">Создайте его</a></span>
                             </div>
+                            <div class="col-12 d-flex flex-column flex-sm-row gap-2 gap-sm-4">
+                                <a class="auth-link small" href="{% url 'users:password-reset' %}">Забыли пароль?</a>
+                                <a class="auth-link small" href="{% url 'users:resend-confirmation' %}">Повторно отправить письмо активации</a>
+                            </div>
                         </div>
                     </form>
                 </div>

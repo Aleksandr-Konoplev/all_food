@@ -1,4 +1,5 @@
-from django.contrib.auth.forms import AuthenticationForm, UserCreationForm
+from django import forms
+from django.contrib.auth.forms import AuthenticationForm, PasswordResetForm, SetPasswordForm, UserCreationForm
 from django.forms import ModelForm
 from users.models import User
 
@@ -133,4 +134,52 @@ class UserUpdateForm(ModelForm):
             'class': 'form-control auth-input',
             'placeholder': 'Ваша фамилия',
             'autocomplete': 'family-name',
+        })
+
+
+class ResendConfirmationForm(forms.Form):
+    email = forms.EmailField(
+        label='Email',
+        help_text='Введите email, указанный при регистрации',
+        widget=forms.EmailInput(
+            attrs={
+                'class': 'form-control auth-input',
+                'placeholder': 'example@mail.ru',
+                'autocomplete': 'email',
+            }
+        ),
+    )
+
+
+class StyledPasswordResetForm(PasswordResetForm):
+    def __init__(self, *args, **kwargs):
+        super().__init__(*args, **kwargs)
+        self.fields['email'].label = 'Email'
+        self.fields['email'].help_text = 'Мы отправим ссылку для сброса пароля на эту почту'
+        self.fields['email'].widget.attrs.update({
+            'class': 'form-control auth-input',
+            'placeholder': 'example@mail.ru',
+            'autocomplete': 'email',
+        })
+
+
+class StyledSetPasswordForm(SetPasswordForm):
+    def __init__(self, *args, **kwargs):
+        super().__init__(*args, **kwargs)
+
+        self.fields['new_password1'].label = 'Новый пароль'
+        self.fields['new_password2'].label = 'Подтверждение пароля'
+
+        self.fields['new_password1'].help_text = 'Минимум 8 символов, не простой пароль.'
+        self.fields['new_password2'].help_text = 'Введите тот же пароль ещё раз.'
+
+        self.fields['new_password1'].widget.attrs.update({
+            'class': 'form-control auth-input',
+            'placeholder': 'Придумайте новый пароль',
+            'autocomplete': 'new-password',
+        })
+        self.fields['new_password2'].widget.attrs.update({
+            'class': 'form-control auth-input',
+            'placeholder': 'Повторите новый пароль',
+            'autocomplete': 'new-password',
         })
