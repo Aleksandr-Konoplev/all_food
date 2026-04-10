@@ -1,6 +1,4 @@
 from unittest.mock import patch
-import os
-from dotenv import load_dotenv
 
 from django.contrib.auth.tokens import default_token_generator
 from django.contrib.auth.models import Group
@@ -14,8 +12,6 @@ from core.models import ContentForSite
 from users.forms import ResendConfirmationForm, StyledPasswordResetForm, StyledSetPasswordForm, UserRegisterForm, UserUpdateForm
 from users.models import User
 
-
-load_dotenv()
 
 def create_base_content():
     for name_tag in ['greeting', 'main_img']:
@@ -105,8 +101,8 @@ class UsersViewsTests(TestCase):
             reverse('users:register'),
             data={
                 'email': 'new@example.com',
-                'password1': os.getenv('TEST_PASSWORD'),
-                'password2': os.getenv('TEST_PASSWORD'),
+                'password1': 'Very-strong-pass-123',
+                'password2': 'Very-strong-pass-123',
                 'phone_number': '+79991112233',
                 'first_name': 'New',
                 'last_name': 'User',
