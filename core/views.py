@@ -96,14 +96,13 @@ class ControlPanelView(ModeratorRequiredMixin, AddBaseContentMixin, TemplateView
             {"label": "Админка Django", "href": "/admin/"},
             {"label": "Контент сайта", "url_name": "core:content-list"},
             {"label": "Сообщения обратной связи", "url_name": "core:feedbacks-list"},
-            {"label": "Тестовая страница", "url_name": "core:test-page"},
             {"label": "Список бронирований", "url_name": "table_reservation:reservation-list"},
             {"label": "Список пользователей", "url_name": "users:users-list"},
         ]
         return context
 
 
-class ContentListView(ModeratorRequiredMixin, ListView):
+class ContentListView(ModeratorRequiredMixin, AddBaseContentMixin, ListView):
     model = ContentForSite
     template_name = "core/content_list.html"  # noqa
     context_object_name = "content_items"
@@ -112,7 +111,7 @@ class ContentListView(ModeratorRequiredMixin, ListView):
         return ContentForSite.objects.order_by("name_tag")
 
 
-class ContentUpdateView(ModeratorRequiredMixin, UpdateView):
+class ContentUpdateView(ModeratorRequiredMixin, AddBaseContentMixin, UpdateView):
     model = ContentForSite
     form_class = ContentForSiteForm
     template_name = "core/content_update.html"  # noqa
