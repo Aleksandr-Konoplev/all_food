@@ -218,3 +218,4 @@ __marimo__/
 # My ignore:
 /tasks.md
 /draft.py
+/.env.vm
