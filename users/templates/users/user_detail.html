@@ -3,11 +3,75 @@
 {% block title %}Профиль пользователя{% endblock %}
 
 {% block content %}
-<h1>Профиль пользователя</h1>
-<p>Имя: {{ user.first_name }}</p>
-<p>Фамилия: {{ user.last_name }}</p>
-<p>Email: {{ user.email }}</p>
-<p>Телефон: {{ user.phone_number }}</p>
-<a href="{% url 'table_reservation:reservation-list' %}">Бронирования</a>
-<a href="{% url 'users:user-update' user.pk %}">Редактировать профиль</a>
+<div class="row g-4 align-items-stretch">
+    <div class="col-lg-4">
+        <div class="card rounded-4 info-card h-100 border-0 shadow-sm overflow-hidden">
+            <div class="card-body p-4 p-lg-5 text-center d-flex flex-column">
+                <img src="{{ user.avatar.url }}" alt="Аватар {{ user.first_name }}" class="rounded-circle mx-auto mb-4 border border-3 border-white shadow" width="132" height="132" style="object-fit: cover;">
+                <span class="badge text-bg-dark rounded-pill align-self-center mb-3">Личный кабинет</span>
+                <h1 class="h3 mb-2">{{ user.first_name }} {{ user.last_name|default:'' }}</h1>
+                <p class="text-body-secondary mb-4">Управляйте контактами, отслеживайте данные аккаунта и переходите к своим бронированиям.</p>
+                <div class="d-grid gap-2 mt-auto">
+                    <a href="{% url 'users:user-update' user.pk %}" class="btn btn-dark">Редактировать профиль</a>
+                    <a href="{% url 'table_reservation:reservation-list' %}" class="btn btn-outline-secondary">Мои бронирования</a>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="col-lg-8">
+        <div class="card rounded-4 info-card border-0 shadow-sm h-100">
+            <div class="card-body p-4 p-lg-5">
+                <div class="d-flex flex-column flex-sm-row justify-content-between align-items-sm-start gap-3 mb-4">
+                    <div>
+                        <span class="text-uppercase small fw-semibold text-body-secondary">Профиль пользователя</span>
+                        <h2 class="h3 mb-1">Контактная информация</h2>
+                        <p class="text-body-secondary mb-0">Все основные данные аккаунта собраны в одном месте.</p>
+                    </div>
+                    <a href="{% url 'users:user-update' user.pk %}" class="btn btn-outline-dark">Изменить данные</a>
+                </div>
+
+                <div class="card bg-body-tertiary border-0 rounded-4 mb-4">
+                    <div class="card-body p-4">
+                        <dl class="row mb-0 g-3">
+                            <dt class="col-sm-4 text-body-secondary">Имя</dt>
+                            <dd class="col-sm-8 mb-0 fw-semibold">{{ user.first_name|default:'-' }}</dd>
+
+                            <dt class="col-sm-4 text-body-secondary">Фамилия</dt>
+                            <dd class="col-sm-8 mb-0 fw-semibold">{{ user.last_name|default:'-' }}</dd>
+
+                            <dt class="col-sm-4 text-body-secondary">Email</dt>
+                            <dd class="col-sm-8 mb-0"><a href="mailto:{{ user.email }}" class="link-dark link-offset-2 link-underline-opacity-25 link-underline-opacity-100-hover">{{ user.email }}</a></dd>
+
+                            <dt class="col-sm-4 text-body-secondary">Телефон</dt>
+                            <dd class="col-sm-8 mb-0">{{ user.phone_number|default:'-' }}</dd>
+                        </dl>
+                    </div>
+                </div>
+
+                <div class="row g-3">
+                    <div class="col-md-6">
+                        <div class="card h-100 border-0 bg-body-tertiary rounded-4">
+                            <div class="card-body p-4">
+                                <h3 class="h6 text-uppercase text-body-secondary mb-2">Аккаунт</h3>
+                                <p class="mb-0">Поддерживайте актуальные контактные данные, чтобы быстрее получать подтверждения и изменения по броням.</p>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-md-6">
+                        <div class="card h-100 border-0 bg-body-tertiary rounded-4">
+                            <div class="card-body p-4">
+                                <h3 class="h6 text-uppercase text-body-secondary mb-2">Быстрые действия</h3>
+                                <div class="d-grid gap-2">
+                                    <a href="{% url 'table_reservation:reservation-list' %}" class="btn btn-outline-secondary btn-sm">Открыть список бронирований</a>
+                                    <a href="{% url 'users:user-update' user.pk %}" class="btn btn-outline-dark btn-sm">Обновить профиль</a>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
 {% endblock %}
