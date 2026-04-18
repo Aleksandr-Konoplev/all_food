@@ -10,10 +10,36 @@ dependencies = [
     "flake8 (>=7.3.0,<8.0.0)",
     "black (>=26.3.0,<27.0.0)",
     "isort (>=8.0.1,<9.0.0)",
-    "django (>=6.0.3,<7.0.0)"
+    "django (>=6.0.3,<7.0.0)",
+    "pillow (>=12.1.1,<13.0.0)",
+    "dotenv (>=0.9.9,<0.10.0)",
+    "psycopg2 (>=2.9.11,<3.0.0)",
+    "shell (>=1.0.1,<2.0.0)",
+    "ipython (>=9.11.0,<10.0.0)",
+    "gunicorn (>=25.3.0,<26.0.0)",
+    "coverage (>=7.13.5,<8.0.0)"
+
 ]
 
 
 [build-system]
 requires = ["poetry-core>=2.0.0,<3.0.0"]
 build-backend = "poetry.core.masonry.api"
+
+
+[tool.black]
+line-length = 119
+target-version = ["py311"]
+skip-string-normalization = false
+skip-magic-trailing-comma = false
+include = '\.pyi?$'
+exclude = '''
+/(
+    \.git
+  | \.venv
+  | venv
+  | __pycache__
+  | build
+  | dist
+)/
+'''

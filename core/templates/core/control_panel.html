@@ -1,0 +1,48 @@
+{% extends 'base.html' %}
+
+{% block title %}Панель управления | All Food{% endblock %}
+
+{% block content %}
+<div class="row g-4 mb-4">
+    <div class="col-lg-8">
+        <div class="card rounded-4 info-card h-100">
+            <div class="card-body p-4 p-lg-5">
+                <span class="text-uppercase small fw-semibold text-warning-emphasis">Управление сайтом</span>
+                <h2 class="mt-2 mb-3">Центр контроля контента и основных разделов</h2>
+                <p class="text-body-secondary mb-0">Здесь собраны быстрые переходы по проекту, ключевые показатели и список контентных блоков, которые можно отредактировать без входа в админку Django.</p>
+            </div>
+        </div>
+    </div>
+    <div class="col-lg-4">
+        <div class="card rounded-4 info-card h-100">
+            <div class="card-body p-4">
+                <h2 class="h5 mb-3">Быстрые действия</h2>
+                <div class="d-grid gap-2">
+                    {% for link in quick_links %}
+                        {% if link.href %}
+                        <a class="btn btn-outline-dark" href="{{ link.href }}">{{ link.label }}</a>
+                        {% else %}
+                        <a class="btn btn-outline-dark" href="{% url link.url_name %}">{{ link.label }}</a>
+                        {% endif %}
+                    {% endfor %}
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="row g-4 mb-4">
+    {% for card in stats_cards %}
+    <div class="col-md-6 col-xl-3">
+        <div class="card rounded-4 info-card h-100">
+            <div class="card-body p-4">
+                <p class="text-body-secondary mb-2">{{ card.title }}</p>
+                <div class="display-6 fw-semibold mb-2">{{ card.value }}</div>
+                <p class="text-body-secondary mb-0">{{ card.description }}</p>
+            </div>
+        </div>
+    </div>
+    {% endfor %}
+</div>
+
+{% endblock %}

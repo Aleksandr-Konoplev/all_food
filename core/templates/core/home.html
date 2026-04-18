@@ -1,0 +1,117 @@
+{% extends 'base.html' %}
+
+{% block title %}Главная | All Food{% endblock %}
+
+{% block content %}
+<div class="row g-4 mb-4">
+    <div class="col-lg-8">
+        <div class="card rounded-4 info-card h-100">
+            <div class="card-body p-4 p-lg-5">
+                <span class="text-uppercase small fw-semibold text-warning-emphasis">О ресторане</span>
+                <p class="text-body-secondary mb-0">{{ restaurant_description.text }}</p>
+            </div>
+        </div>
+    </div>
+    <div class="col-lg-4">
+        <div class="card rounded-4 info-card h-100">
+            <div class="card-body p-4">
+                <h2 class="h5 mb-3">Контакты</h2>
+                <p class="mb-2"><strong>Адрес:</strong> {{ address.text }}</p>
+                <p class="mb-2"><strong>Телефон:</strong> {{ phone.text }}</p>
+                <p class="mb-0"><strong>Часы работы:</strong> {{ working_hours.text }}</p>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="row g-4 mb-4">
+    <div class="col-md-6 col-xl-3">
+        <div class="card rounded-4 info-card h-100">
+            <div class="card-body p-4">
+                <h3 class="h5">Бронирование онлайн</h3>
+                <p class="text-body-secondary mb-0">Гость выбирает дату, время и столик без звонка администратору.</p>
+            </div>
+        </div>
+    </div>
+    <div class="col-md-6 col-xl-3">
+        <div class="card rounded-4 info-card h-100">
+            <div class="card-body p-4">
+                <h3 class="h5">Банкеты и события</h3>
+                <p class="text-body-secondary mb-0">Подойдет для семейных праздников, дней рождения и камерных вечеров.</p>
+            </div>
+        </div>
+    </div>
+    <div class="col-md-6 col-xl-3">
+        <div class="card rounded-4 info-card h-100">
+            <div class="card-body p-4">
+                <h3 class="h5">Обратная связь</h3>
+                <p class="text-body-secondary mb-0">Форму можно использовать для вопросов, пожеланий и уточнения деталей визита.</p>
+            </div>
+        </div>
+    </div>
+    <div class="col-md-6 col-xl-3">
+        <div class="card rounded-4 info-card h-100">
+            <div class="card-body p-4">
+                <h3 class="h5">Личный кабинет</h3>
+                <p class="text-body-secondary mb-0">Зарегистрированный пользователь сможет управлять своими текущими бронированиями.</p>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="row g-4">
+    <div class="col-12">
+        <div class="card rounded-4 info-card h-100">
+            {# Форма обратной связи #}
+            <div class="card-body p-4 p-lg-5">
+                <h2 class="h4 mb-3">Оставьте сообщение</h2>
+                <form method="post">
+                    {% csrf_token %}
+                    <div class="row g-3">
+                        <div class="col-md-6">
+                            <label class="form-label" for="{{ form.user_name.id_for_label }}">{{ form.user_name.label }}</label>
+                            {{ form.user_name }}
+                            {% for error in form.user_name.errors %}
+                                <div class="text-danger small mt-1">{{ error }}</div>
+                            {% endfor %}
+                        </div>
+                        <div class="col-md-6">
+                            <label class="form-label" for="{{ form.phone.id_for_label }}">{{ form.phone.label }}</label>
+                            {{ form.phone }}
+                            {% for error in form.phone.errors %}
+                                <div class="text-danger small mt-1">{{ error }}</div>
+                            {% endfor %}
+                        </div>
+                        <div class="col-12">
+                            <label class="form-label" for="{{ form.email.id_for_label }}">{{ form.email.label }}</label>
+                            {{ form.email }}
+                            {% for error in form.email.errors %}
+                                <div class="text-danger small mt-1">{{ error }}</div>
+                            {% endfor %}
+                        </div>
+                        <div class="col-12">
+                            <label class="form-label" for="{{ form.body.id_for_label }}">{{ form.body.label }}</label>
+                            {{ form.body }}
+                            {% for error in form.body.errors %}
+                                <div class="text-danger small mt-1">{{ error }}</div>
+                            {% endfor %}
+                        </div>
+                        {% if form.non_field_errors %}
+                            <div class="col-12">
+                                <div class="alert alert-danger mb-0">
+                                    {% for error in form.non_field_errors %}
+                                        <div>{{ error }}</div>
+                                    {% endfor %}
+                                </div>
+                            </div>
+                        {% endif %}
+                        <div class="col-12">
+                            <button class="btn btn-dark" type="submit">Отправить</button>
+                        </div>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}

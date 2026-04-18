@@ -1,0 +1,70 @@
+{% extends 'base.html' %}
+
+{% block title %}Редактирование контента | All Food{% endblock %}
+
+{% block content %}
+<div class="row g-4 align-items-start">
+    <div class="col-lg-7">
+        <div class="card rounded-4 info-card">
+            <div class="card-body p-4 p-lg-5">
+                <span class="text-uppercase small fw-semibold text-warning-emphasis">Контент сайта</span>
+                <h2 class="mt-2 mb-3">Редактирование блока {{ object.name_tag }}</h2>
+                <p class="text-body-secondary mb-4">Измените текст и изображение для выбранного элемента сайта. После сохранения вы останетесь на этой странице.</p>
+
+                <form method="post" enctype="multipart/form-data">
+                    {% csrf_token %}
+                    <div class="row g-3">
+                        {% for field in form %}
+                        <div class="col-12">
+                            <label class="form-label" for="{{ field.id_for_label }}">{{ field.label }}</label>
+                            {{ field }}
+                            {% if field.help_text %}
+                            <div class="form-text">{{ field.help_text }}</div>
+                            {% endif %}
+                            {% for error in field.errors %}
+                            <div class="text-danger small mt-1">{{ error }}</div>
+                            {% endfor %}
+                        </div>
+                        {% endfor %}
+                    </div>
+
+                    {% if form.non_field_errors %}
+                    <div class="alert alert-danger mt-3 mb-0">
+                        {% for error in form.non_field_errors %}
+                        <div>{{ error }}</div>
+                        {% endfor %}
+                    </div>
+                    {% endif %}
+
+                    <div class="d-flex flex-wrap gap-2 mt-4">
+                        <button class="btn btn-dark" type="submit">Сохранить изменения</button>
+                        <a class="btn btn-outline-secondary" href="{% url 'core:home' %}">На главную</a>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+
+    <div class="col-lg-5">
+        <div class="card rounded-4 info-card mb-4">
+            <div class="card-body p-4">
+                <h3 class="h5 mb-3">Текущие данные</h3>
+                <p class="mb-2"><strong>Ключ:</strong> {{ object.name_tag }}</p>
+                <p class="text-body-secondary mb-0">Используйте стабильные ключи вроде `greeting`, `address` или `working_hours`, чтобы страницы корректно подставляли данные.</p>
+            </div>
+        </div>
+
+        <div class="card rounded-4 info-card">
+            <div class="card-body p-4">
+                <h3 class="h5 mb-3">Изображение</h3>
+                {% if object.image %}
+                <img src="{{ object.image.url }}" alt="{{ object.name_tag }}" class="img-fluid rounded-4 mb-3">
+                <p class="text-body-secondary mb-0">При загрузке нового файла текущее изображение будет заменено.</p>
+                {% else %}
+                <p class="text-body-secondary mb-0">Для этого блока изображение пока не загружено.</p>
+                {% endif %}
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}

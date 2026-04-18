@@ -1,0 +1,49 @@
+{% load users_groups %}
+
+<!--suppress HtmlUnknownTarget -->
+<nav class="navbar navbar-expand-lg bg-white border-bottom sticky-top shadow-sm">
+    <div class="container">
+        <a class="navbar-brand fw-semibold" href="/">All Food</a>
+        <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#mainMenu" aria-controls="mainMenu" aria-expanded="false" aria-label="Переключить навигацию">
+            <span class="navbar-toggler-icon"></span>
+        </button>
+
+        <div class="collapse navbar-collapse" id="mainMenu">
+            <ul class="navbar-nav me-auto mb-2 mb-lg-0">
+                <li class="nav-item">
+                    <a class="nav-link" href="{% url 'core:home' %}">Главная</a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" href="{% url 'core:about' %}">О ресторане</a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" href="{% url 'table_reservation:reservation-create' %}">Забронировать</a>
+                </li>
+                {% if request.user|has_group:'moderator' %}
+                <li class="nav-item">
+                    <a class="nav-link" href="{% url 'core:control-panel' %}">Панель управления</a>
+                </li>
+                {% endif %}
+            </ul>
+
+            <div class="d-flex flex-column flex-lg-row align-items-lg-center gap-2 gap-lg-3">
+                {% if request.user.is_authenticated %}
+                    <span class="badge text-bg-success-subtle border border-success-subtle text-success-emphasis px-3 py-2">
+                        Вы вошли как {{ request.user.first_name|default:request.user.email }}
+                    </span>
+                    {% if request.user.pk %}
+                        <a class="btn btn-outline-secondary btn-sm" href="{% url 'users:user-detail' request.user.pk %}">Профиль</a>
+                    {% endif %}
+                    <form method="post" action="{% url 'users:logout' %}" class="m-0">
+                        {% csrf_token %}
+                        <button type="submit" class="btn btn-dark btn-sm">Выход</button>
+                    </form>
+                {% else %}
+                    <span class="text-body-secondary small">Гость</span>
+                    <a class="btn btn-outline-dark btn-sm" href="{% url 'users:login' %}">Вход</a>
+                    <a class="btn btn-warning btn-sm" href="{% url 'users:register' %}">Регистрация</a>
+                {% endif %}
+            </div>
+        </div>
+    </div>
+</nav>

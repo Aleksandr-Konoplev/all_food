@@ -1,0 +1,62 @@
+[
+{
+    "model": "table_reservation.table",
+    "pk": 1,
+    "fields": {
+        "num_table": 1,
+        "num_of_seats": 2,
+        "description": "Столик у окна для спокойного ужина вдвоем",
+        "min_deposit": 2000
+    }
+},
+{
+    "model": "table_reservation.table",
+    "pk": 2,
+    "fields": {
+        "num_table": 2,
+        "num_of_seats": 4,
+        "description": "Столик в центре зала для небольшой компании",
+        "min_deposit": 3000
+    }
+},
+{
+    "model": "table_reservation.table",
+    "pk": 3,
+    "fields": {
+        "num_table": 3,
+        "num_of_seats": 4,
+        "description": "Угловой столик в тихой части ресторана",
+        "min_deposit": 3000
+    }
+},
+{
+    "model": "table_reservation.table",
+    "pk": 4,
+    "fields": {
+        "num_table": 4,
+        "num_of_seats": 6,
+        "description": "Просторный столик для семейного ужина",
+        "min_deposit": 4000
+    }
+},
+{
+    "model": "table_reservation.table",
+    "pk": 5,
+    "fields": {
+        "num_table": 5,
+        "num_of_seats": 6,
+        "description": "Столик рядом с барной зоной для дружеской встречи",
+        "min_deposit": 4000
+    }
+},
+{
+    "model": "table_reservation.table",
+    "pk": 6,
+    "fields": {
+        "num_table": 6,
+        "num_of_seats": 8,
+        "description": "Большой столик для праздника или компании гостей",
+        "min_deposit": 5000
+    }
+}
+]
