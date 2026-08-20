@@ -1,5 +1,6 @@
 from pathlib import Path
 import os
+import dj_database_url
 from dotenv import load_dotenv
 
 
@@ -11,8 +12,8 @@ SECRET_KEY = os.getenv('SECRET_KEY')
 
 DEBUG = True if os.getenv('DEBUG') == 'True' else False
 
-ALLOWED_HOSTS = [host for host in os.getenv('ALLOWED_HOSTS').split(',') if host]
-CSRF_TRUSTED_ORIGINS = [host for host in os.getenv('CSRF_TRUSTED_ORIGINS').split(',') if host]
+ALLOWED_HOSTS = [host for host in os.getenv('ALLOWED_HOSTS', '').split(',') if host] or ['*']
+CSRF_TRUSTED_ORIGINS = [host for host in os.getenv('CSRF_TRUSTED_ORIGINS', '').split(',') if host]
 
 INSTALLED_APPS = [
     'django.contrib.admin',
@@ -61,13 +62,19 @@ WSGI_APPLICATION = 'config.wsgi.application'
 
 # ---------------------- Настройки базы данных ----------------------
 DATABASES = {
+    'default': dj_database_url.parse(
+        os.getenv('DATABASE_URL'),
+        conn_max_age=600,
+        conn_health_checks=True,
+    )
+} if os.getenv('DATABASE_URL') else {
     'default': {
         'ENGINE': 'django.db.backends.postgresql',
         'NAME': os.getenv('POSTGRES_DB'),
         'USER': os.getenv('POSTGRES_USER'),
         'PASSWORD': os.getenv('POSTGRES_PASSWORD'),
         'HOST': os.getenv('HOST'),
-        'PORT': os.getenv('PORT'),
+        'PORT': os.getenv('POSTGRES_PORT', '5432'),
     }
 }
 # -------------------------------------------------------------------
@@ -119,30 +126,34 @@ DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
 
 
 # ------------------- Настройки почтового сервиса -------------------
-EMAIL_SERVICES = {
-    # Почта для общения персонала с клиентами
-    'main': {
+# Если SMTP-переменные не заданы, письма пишутся в консоль
+EMAIL_BACKEND = 'django.core.mail.backends.smtp.EmailBackend'
+EMAIL_SERVICES = {}
+
+if os.getenv('EMAIL_HOST_MAIN'):
+    EMAIL_SERVICES['main'] = {
         'HOST': os.getenv('EMAIL_HOST_MAIN'),
         'PORT': int(os.getenv('EMAIL_PORT_MAIN')),
         'USER': os.getenv('EMAIL_HOST_USER_MAIN'),
         'PASSWORD': os.getenv('EMAIL_HOST_PASSWORD_MAIN'),
-        'USE_TLS': True if os.getenv('EMAIL_USE_TLS_MAIN') == 'True' else False,
-        'USE_SSL': True if os.getenv('EMAIL_USE_SSL_MAIN') == 'True' else False,
-    },
-    # Почта для автоматических рассылок
-    'auto': {
+        'USE_TLS': os.getenv('EMAIL_USE_TLS_MAIN') == 'True',
+        'USE_SSL': os.getenv('EMAIL_USE_SSL_MAIN') == 'True',
+    }
+
+if os.getenv('EMAIL_HOST_AUTO'):
+    EMAIL_SERVICES['auto'] = {
         'HOST': os.getenv('EMAIL_HOST_AUTO'),
         'PORT': int(os.getenv('EMAIL_PORT_AUTO')),
         'USER': os.getenv('EMAIL_HOST_USER_AUTO'),
         'PASSWORD': os.getenv('EMAIL_HOST_PASSWORD_AUTO'),
-        'USE_TLS': True if os.getenv('EMAIL_USE_TLS_AUTO') == 'True' else False,
-        'USE_SSL': True if os.getenv('EMAIL_USE_SSL_AUTO') == 'True' else False,
+        'USE_TLS': os.getenv('EMAIL_USE_TLS_AUTO') == 'True',
+        'USE_SSL': os.getenv('EMAIL_USE_SSL_AUTO') == 'True',
     }
-}
 
-EMAIL_BACKEND = 'django.core.mail.backends.smtp.EmailBackend'
+if not EMAIL_SERVICES:
+    EMAIL_BACKEND = 'django.core.mail.backends.console.EmailBackend'
 
 # Главную почту используем по умолчанию
-SERVER_EMAIL = EMAIL_SERVICES['main']['USER']
-DEFAULT_FROM_EMAIL = EMAIL_SERVICES['main']['USER']
+SERVER_EMAIL = EMAIL_SERVICES.get('main', {}).get('USER', 'noreply@localhost')
+DEFAULT_FROM_EMAIL = EMAIL_SERVICES.get('main', {}).get('USER', 'noreply@localhost')
 # -------------------------------------------------------------------
