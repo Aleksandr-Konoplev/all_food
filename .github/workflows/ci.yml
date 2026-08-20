@@ -19,7 +19,7 @@ jobs:
         env:
           POSTGRES_DB: all_food_test
           POSTGRES_USER: postgres
-          POSTGRES_PASSWORD: postgres
+          POSTGRES_PASSWORD: ${{ secrets.POSTGRES_PASSWORD }}
         options: >-
           --health-cmd "pg_isready -U postgres"
           --health-interval 10s
